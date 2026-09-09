@@ -1,14 +1,10 @@
-import * as React from "react";
-import { Platform, Text as RNText, type Role } from "react-native";
-import { cva, type VariantProps } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
+import { type VariantProps, cva } from "class-variance-authority"
+import * as React from "react"
+import { Platform, Text as RNText, type Role } from "react-native"
+import { cn } from "@/lib/utils"
 
 const textVariants = cva(
-  cn(
-    "text-foreground text-base",
-    Platform.select({ web: "select-text" })
-  ),
+  cn("text-foreground text-base", Platform.select({ web: "select-text" })),
   {
     variants: {
       variant: {
@@ -29,42 +25,44 @@ const textVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
-);
+  },
+)
 
-type TextVariantProps = VariantProps<typeof textVariants>;
-type TextVariant = NonNullable<TextVariantProps["variant"]>;
+type TextVariantProps = VariantProps<typeof textVariants>
+type TextVariant = NonNullable<TextVariantProps["variant"]>
 
 const ROLE: Partial<Record<TextVariant, Role>> = {
   h1: "heading",
   h2: "heading",
   h3: "heading",
   h4: "heading",
-};
+}
 
 const ARIA_LEVEL: Partial<Record<TextVariant, string>> = {
   h1: "1",
   h2: "2",
   h3: "3",
   h4: "4",
-};
+}
 
-const TextClassContext = React.createContext<string | undefined>(undefined);
+const TextClassContext = React.createContext<string | undefined>(undefined)
 
 function Text({
   className,
   variant = "default",
   ...props
 }: React.ComponentProps<typeof RNText> & TextVariantProps) {
-  const textClass = React.useContext(TextClassContext);
-  return (
+  const textClass = React.useContext(TextClassContext)
+
+  
+return (
     <RNText
       className={cn(textVariants({ variant }), textClass, className)}
       role={variant ? ROLE[variant] : undefined}
       aria-level={variant ? ARIA_LEVEL[variant] : undefined}
       {...props}
     />
-  );
+  )
 }
 
-export { Text, TextClassContext, textVariants };
+export { Text, TextClassContext, textVariants }
