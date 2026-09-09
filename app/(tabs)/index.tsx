@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useColorScheme } from "nativewind";
-
-import { Button } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
+import { useColorScheme } from "nativewind"
+import { useState } from "react"
+import { ScrollView, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { Button } from "@/components/ui/button"
+import { Text } from "@/components/ui/text"
 
 export default function HomeScreen() {
-  const [count, setCount] = useState(0);
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const [count, setCount] = useState(0)
+  const { colorScheme, toggleColorScheme } = useColorScheme()
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -18,12 +17,13 @@ export default function HomeScreen() {
             NativeWind check
           </Text>
           <Text variant="muted">
-            If this looks styled, NativeWind + react-native-reusables are wired up.
+            If this looks styled, NativeWind + react-native-reusables are wired
+            up.
           </Text>
         </View>
 
         {/* Plain NativeWind: utility classes on a RN View */}
-        <View className="rounded-xl border border-border bg-card p-4 gap-2">
+        <View className="gap-2 rounded-xl border border-border bg-card p-4">
           <Text variant="large">Utility classes</Text>
           <View className="flex-row flex-wrap gap-2">
             <View className="h-10 w-10 rounded-lg bg-primary" />
@@ -34,19 +34,23 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* react-native-reusables Text variants */}
-        <View className="rounded-xl border border-border bg-card p-4 gap-2">
+        {/* React-native-reusables Text variants */}
+        <View className="gap-2 rounded-xl border border-border bg-card p-4">
           <Text variant="large">{"<Text> variants"}</Text>
           <Text variant="h3">Heading 3</Text>
-          <Text variant="p">A paragraph of body text with relaxed leading.</Text>
-          <Text variant="blockquote">A blockquote, indented with a left border.</Text>
+          <Text variant="p">
+            A paragraph of body text with relaxed leading.
+          </Text>
+          <Text variant="blockquote">
+            A blockquote, indented with a left border.
+          </Text>
           <Text variant="code">const answer = 42;</Text>
           <Text variant="lead">A lead sentence.</Text>
           <Text variant="muted">Muted footnote text.</Text>
         </View>
 
-        {/* react-native-reusables Button variants + interaction */}
-        <View className="rounded-xl border border-border bg-card p-4 gap-3">
+        {/* React-native-reusables Button variants + interaction */}
+        <View className="gap-3 rounded-xl border border-border bg-card p-4">
           <Text variant="large">{"<Button> variants"}</Text>
           <Button onPress={() => setCount((c) => c + 1)}>
             <Text>Pressed {count} times</Text>
@@ -72,5 +76,5 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
