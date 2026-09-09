@@ -2,6 +2,33 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Configuration de l'API
+
+L'application ne contient aucune URL en dur : le client HTTP lit
+`EXPO_PUBLIC_API_URL`.
+
+```bash
+cp .env.example .env   # http://localhost:3000 par défaut
+```
+
+Lancer l'API fournie (`api-books-v2/`) avant l'application :
+
+```bash
+npm install && npm run seed && npm start   # dans api-books-v2/
+```
+
+## Architecture en couches
+
+| Dossier       | Rôle                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| `app/`        | Écrans et routing expo-router — ni logique métier, ni réseau          |
+| `components/` | Interface pure, sans dépendance à l'API ni au cache                   |
+| `features/`   | Découpage par domaine (`books` : clés de cache, requêtes, mutations)  |
+| `services/`   | Réseau, plateforme, `QueryClient` — seul endroit qui connaît l'API    |
+| `domain/`     | Schémas zod, types et erreurs applicatives, sans dépendance technique |
+
+Décisions d'architecture : [`docs/ADR/`](docs/ADR).
+
 ## Get started
 
 1. Install dependencies
