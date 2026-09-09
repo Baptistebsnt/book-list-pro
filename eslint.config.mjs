@@ -1,14 +1,12 @@
-import { defineConfig } from "eslint/config"
 import eslint from "@eslint/js"
 import expoConfig from "eslint-config-expo/flat.js"
 import reactPlugin from "eslint-plugin-react"
 import reactCompiler from "eslint-plugin-react-compiler"
 import hooksPlugin from "eslint-plugin-react-hooks"
+import { defineConfig } from "eslint/config"
 import globals from "globals"
 import tseslint from "typescript-eslint"
 
-// Adapted from https://github.com/Zweird-958/sipdex (tooling/eslint base + react),
-// flattened for this single-package Expo app (turbo/monorepo rules removed).
 export default defineConfig([
   expoConfig,
   {
@@ -285,6 +283,12 @@ export default defineConfig([
     files: ["components/ui/**"],
     rules: {
       "no-undefined": "off",
+    },
+  },
+  {
+    files: ["services/api/errors.ts"],
+    rules: {
+      "max-classes-per-file": "off",
     },
   },
   {
