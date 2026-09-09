@@ -1,18 +1,18 @@
 import { type QueryClient } from "@tanstack/react-query"
-import { clesOuvrages } from "./cles"
+import { bookKeys } from "./keys"
 
 /**
- * Après écriture, toutes les listes redeviennent suspectes : les filtres et le
- * tri sont calculés par le serveur, on ne peut donc pas deviner quelles pages
- * changent. La fiche concernée est invalidée en plus, quand elle existe.
+ * After a write every list becomes suspect: filtering and sorting happen on
+ * the server, so we cannot guess which pages changed. The affected record is
+ * invalidated on top of that, when there is one.
  */
-export const invaliderOuvrages = async (
+export const invalidateBooks = async (
   client: QueryClient,
   id?: string,
 ): Promise<void> => {
-  await client.invalidateQueries({ queryKey: clesOuvrages.listes() })
+  await client.invalidateQueries({ queryKey: bookKeys.lists() })
 
   if (typeof id === "string") {
-    await client.invalidateQueries({ queryKey: clesOuvrages.detail(id) })
+    await client.invalidateQueries({ queryKey: bookKeys.detail(id) })
   }
 }

@@ -6,12 +6,12 @@ import { StatusBar } from "expo-status-bar"
 import { useColorScheme } from "nativewind"
 import { useState } from "react"
 import { NAV_THEME } from "@/lib/theme"
-import { creerQueryClient } from "@/services/query/client"
+import { createQueryClient } from "@/services/query/client"
 import "../global.css"
 
 const RootLayout = () => {
   const { colorScheme } = useColorScheme()
-  const [queryClient] = useState(creerQueryClient)
+  const [queryClient] = useState(createQueryClient)
 
   return (
     <QueryClientProvider client={queryClient}>

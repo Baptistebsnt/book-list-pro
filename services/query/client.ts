@@ -1,36 +1,36 @@
 import { QueryClient } from "@tanstack/react-query"
-import { estErreurApplicative } from "@/domain/erreurs"
+import { isAppError } from "@/domain/errors"
 
-const NOMBRE_ESSAIS_MAX = 3
+const MAX_ATTEMPTS = 3
 
-const DELAI_INITIAL_MS = 500
+const INITIAL_DELAY_MS = 500
 
-const DELAI_MAX_MS = 10000
+const MAX_DELAY_MS = 10000
 
-const DUREE_FRAICHEUR_MS = 30000
+const STALE_TIME_MS = 30000
 
 /**
- * Le mode dégradé de l'API renvoie des 503 et de la latence : on réessaie les
- * erreurs marquées réessayables, jamais une validation, un conflit ou un 403.
+ * The API degraded mode returns 503s and latency: we replay errors flagged as
+ * retryable, never a validation failure, a conflict or a forbidden role.
  */
-const doitReessayer = (nombreEchecs: number, erreur: Error): boolean => {
-  if (nombreEchecs >= NOMBRE_ESSAIS_MAX) {
+const shouldRetry = (failureCount: number, error: Error): boolean => {
+  if (failureCount >= MAX_ATTEMPTS) {
     return false
   }
 
-  return estErreurApplicative(erreur) ? erreur.estReessayable : true
+  return isAppError(error) ? error.isRetryable : true
 }
 
-const delaiAvantEssai = (nombreEchecs: number): number =>
-  Math.min(DELAI_INITIAL_MS * 2 ** nombreEchecs, DELAI_MAX_MS)
+const retryDelay = (failureCount: number): number =>
+  Math.min(INITIAL_DELAY_MS * 2 ** failureCount, MAX_DELAY_MS)
 
-export const creerQueryClient = (): QueryClient =>
+export const createQueryClient = (): QueryClient =>
   new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: DUREE_FRAICHEUR_MS,
-        retry: doitReessayer,
-        retryDelay: delaiAvantEssai,
+        staleTime: STALE_TIME_MS,
+        retry: shouldRetry,
+        retryDelay,
         refetchOnWindowFocus: false,
       },
       mutations: {

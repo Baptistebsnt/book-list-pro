@@ -34,21 +34,21 @@ Contraintes :
 
 Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
 
-- **Clés structurées et hiérarchiques** (`features/books/cles.ts`) :
-  `["ouvrages"]` > `["ouvrages","liste"]` > `["ouvrages","liste",filtres]` et
-  `["ouvrages","detail",id]`. Invalider un préfixe invalide toute sa
+- **Clés structurées et hiérarchiques** (`features/books/keys.ts`) :
+  `["books"]` > `["books","list"]` > `["books","list",filters]` et
+  `["books","detail",id]`. Invalider un préfixe invalide toute sa
   descendance.
 - **Filtres normalisés par zod** avant d'entrer dans la clé
-  (`normaliserFiltres`) : deux jeux de filtres équivalents partagent la même
+  (`normalizeFilters`) : deux jeux de filtres équivalents partagent la même
   entrée de cache au lieu d'en créer deux.
-- **Invalidation après mutation** centralisée dans `invaliderOuvrages` :
+- **Invalidation après mutation** centralisée dans `invalidateBooks` :
   toutes les listes plus la fiche touchée. Le tri et le filtrage étant calculés
   par le serveur, il est impossible de deviner quelles pages changent — on
   invalide donc l'ensemble des listes plutôt que d'éditer le cache à l'aveugle.
 - **Réponse fraîche écrite dans le cache détail** (`setQueryData`) pour éviter
   un aller-retour immédiat après une écriture.
-- **Politique de reprise adossée au domaine** : `estErreurApplicative` +
-  `estReessayable` — on réessaie un 503 ou une coupure réseau, jamais une
+- **Politique de reprise adossée au domaine** : `isAppError` +
+  `isRetryable` — on réessaie un 503 ou une coupure réseau, jamais une
   validation, un conflit de version ou un refus de rôle.
 - **Le `QueryClient` est créé dans `app/_layout.tsx` via `useState`**, pas au
   niveau module : l'export web statique d'Expo évaluerait sinon le même cache
@@ -65,3 +65,7 @@ plusieurs requêtes après chaque écriture.
 
 À revoir si : le coût de l'invalidation large devient visible en mode dégradé —
 on passerait alors à une mise à jour ciblée du cache par page.
+
+Note : le code est écrit en anglais ; seuls les noms de champs de l'API
+(`titre`, `auteur`, `annee`, `lu`, `favori`, `couverture`...) restent en français,
+car ils appartiennent au contrat réseau et ne nous appartiennent pas.

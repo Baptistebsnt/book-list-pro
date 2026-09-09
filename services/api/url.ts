@@ -1,48 +1,40 @@
-import { CONFIG_API } from "./config"
+import { API_CONFIG } from "./config"
 
-export type ParametresRequete = Record<
+export type QueryParams = Record<
   string,
   string | number | boolean | null | undefined
 >
 
-const serialiser = (parametres: ParametresRequete): string => {
-  const paires = Object.entries(parametres)
-    .filter(([, valeur]) => valeur !== null && typeof valeur !== "undefined")
+const serialize = (params: QueryParams): string => {
+  const pairs = Object.entries(params)
+    .filter(([, value]) => value !== null && typeof value !== "undefined")
     .map(
-      ([cle, valeur]) =>
-        `${encodeURIComponent(cle)}=${encodeURIComponent(String(valeur))}`,
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
     )
 
-  return paires.length === 0 ? "" : `?${paires.join("&")}`
+  return pairs.length === 0 ? "" : `?${pairs.join("&")}`
 }
 
-/** Seul endroit où l'URL de base est concaténée à un chemin. */
-export const construireUrl = (
-  chemin: string,
-  parametres?: ParametresRequete,
-): string => {
-  const cheminNormalise = chemin.startsWith("/") ? chemin : `/${chemin}`
+/** The only place where the base URL is joined to a path. */
+export const buildUrl = (path: string, params?: QueryParams): string => {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`
 
-  return `${CONFIG_API.urlDeBase}${cheminNormalise}${
-    parametres ? serialiser(parametres) : ""
-  }`
+  return `${API_CONFIG.baseUrl}${normalizedPath}${params ? serialize(params) : ""}`
 }
 
 /**
- * Résout la valeur du champ `couverture` : chemin relatif préfixé, URL absolue
- * conservée, valeur nulle repliée sur la couverture générée par l'API.
+ * Resolves the `couverture` field: a relative path gets prefixed, an absolute
+ * URL is left untouched, a null value falls back to the generated cover.
  */
-export const urlCouverture = (
-  couverture: string | null,
-  idOuvrage: string,
-): string => {
-  if (couverture === null || couverture.trim().length === 0) {
-    return construireUrl(`/covers/${idOuvrage}.svg`)
+export const coverUrl = (cover: string | null, bookId: string): string => {
+  if (cover === null || cover.trim().length === 0) {
+    return buildUrl(`/covers/${bookId}.svg`)
   }
 
-  if (/^https?:\/\//iu.test(couverture)) {
-    return couverture
+  if (/^https?:\/\//iu.test(cover)) {
+    return cover
   }
 
-  return construireUrl(couverture)
+  return buildUrl(cover)
 }
