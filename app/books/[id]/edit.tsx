@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { Text, View } from 'react-native';
 
 export default function EditBookRoute() {
@@ -6,8 +6,16 @@ export default function EditBookRoute() {
 
   return (
     <View>
-      <Text>Modifier un ouvrage</Text>
-      <Text>Identifiant : {id}</Text>
+        <Text>Modifier un ouvrage</Text>
+        <Text>Identifiant : {id}</Text>
+        <Link
+            href={{
+                pathname: '/books/[id]',
+                params: { id },
+            }}
+        >
+            Annuler et revenir à la fiche
+        </Link>
     </View>
   );
 }
