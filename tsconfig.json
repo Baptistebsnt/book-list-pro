@@ -1,17 +1,29 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "jsx": "react-jsx",
+
     "strict": true,
+    "checkJs": false,
+    "noUncheckedIndexedAccess": false,
+
+    "isolatedModules": true,
+    "incremental": true,
+    "disableSourceOfProjectReferenceRedirect": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@/assets/*": ["./assets/*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ]
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": ["node_modules", "build", "dist", ".expo"]
 }
