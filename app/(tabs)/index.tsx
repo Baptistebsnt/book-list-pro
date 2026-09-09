@@ -1,98 +1,76 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from "react";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useColorScheme } from "nativewind";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [count, setCount] = useState(0);
+  const { colorScheme, toggleColorScheme } = useColorScheme();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView contentContainerClassName="gap-6 p-6">
+        <View className="gap-1">
+          <Text variant="h1" className="text-left">
+            NativeWind check
+          </Text>
+          <Text variant="muted">
+            If this looks styled, NativeWind + react-native-reusables are wired up.
+          </Text>
+        </View>
+
+        {/* Plain NativeWind: utility classes on a RN View */}
+        <View className="rounded-xl border border-border bg-card p-4 gap-2">
+          <Text variant="large">Utility classes</Text>
+          <View className="flex-row flex-wrap gap-2">
+            <View className="h-10 w-10 rounded-lg bg-primary" />
+            <View className="h-10 w-10 rounded-lg bg-secondary" />
+            <View className="h-10 w-10 rounded-lg bg-destructive" />
+            <View className="h-10 w-10 rounded-lg bg-muted" />
+            <View className="h-10 w-10 rounded-full border-2 border-border" />
+          </View>
+        </View>
+
+        {/* react-native-reusables Text variants */}
+        <View className="rounded-xl border border-border bg-card p-4 gap-2">
+          <Text variant="large">{"<Text> variants"}</Text>
+          <Text variant="h3">Heading 3</Text>
+          <Text variant="p">A paragraph of body text with relaxed leading.</Text>
+          <Text variant="blockquote">A blockquote, indented with a left border.</Text>
+          <Text variant="code">const answer = 42;</Text>
+          <Text variant="lead">A lead sentence.</Text>
+          <Text variant="muted">Muted footnote text.</Text>
+        </View>
+
+        {/* react-native-reusables Button variants + interaction */}
+        <View className="rounded-xl border border-border bg-card p-4 gap-3">
+          <Text variant="large">{"<Button> variants"}</Text>
+          <Button onPress={() => setCount((c) => c + 1)}>
+            <Text>Pressed {count} times</Text>
+          </Button>
+          <Button variant="secondary" onPress={() => setCount(0)}>
+            <Text>Reset</Text>
+          </Button>
+          <Button variant="outline" onPress={toggleColorScheme}>
+            <Text>Toggle theme (now: {colorScheme})</Text>
+          </Button>
+          <Button variant="destructive">
+            <Text>Destructive</Text>
+          </Button>
+          <Button variant="ghost">
+            <Text>Ghost</Text>
+          </Button>
+          <Button variant="link">
+            <Text>Link</Text>
+          </Button>
+          <Button disabled>
+            <Text>Disabled</Text>
+          </Button>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
