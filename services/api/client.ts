@@ -1,125 +1,125 @@
 import { type z } from "zod"
-import { ErreurReseau, ErreurValidation } from "@/domain/erreurs"
-import { CONFIG_API } from "./config"
-import { erreurDepuisReponse } from "./erreurs-http"
-import { type ParametresRequete, construireUrl } from "./url"
+import { NetworkError, ValidationError } from "@/domain/errors"
+import { API_CONFIG } from "./config"
+import { errorFromResponse } from "./http-errors"
+import { type QueryParams, buildUrl } from "./url"
 
-export type MethodeHttp = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
-export type OptionsRequete<TSortie> = {
-  chemin: string
-  schema: z.ZodType<TSortie>
-  methode?: MethodeHttp
-  parametres?: ParametresRequete
-  corps?: unknown
-  /** Version connue de la fiche : envoyée en If-Match pour détecter les 409. */
+export type RequestOptions<TOutput> = {
+  path: string
+  schema: z.ZodType<TOutput>
+  method?: HttpMethod
+  params?: QueryParams
+  body?: unknown
+  /** Known record version: sent as If-Match so the API can report a 409. */
   version?: number
   signal?: AbortSignal
-  delaiMs?: number
+  timeoutMs?: number
 }
 
-const construireEntetes = (options: OptionsRequete<unknown>): HeadersInit => {
-  const entetes: Record<string, string> = { Accept: "application/json" }
+const buildHeaders = (options: RequestOptions<unknown>): HeadersInit => {
+  const headers: Record<string, string> = { Accept: "application/json" }
 
-  if (typeof options.corps !== "undefined") {
-    entetes["Content-Type"] = "application/json"
+  if (typeof options.body !== "undefined") {
+    headers["Content-Type"] = "application/json"
   }
 
   if (typeof options.version === "number") {
-    entetes["If-Match"] = String(options.version)
+    headers["If-Match"] = String(options.version)
   }
 
-  return entetes
+  return headers
 }
 
-const traduireEchec = (
+const translateFailure = (
   cause: unknown,
-  signalAppelant?: AbortSignal,
+  callerSignal?: AbortSignal,
 ): unknown => {
-  if (signalAppelant?.aborted === true) {
+  if (callerSignal?.aborted === true) {
     return cause
   }
 
   if (cause instanceof Error && cause.name === "AbortError") {
-    return new ErreurReseau(
-      "delai-expire",
-      `Le serveur n'a pas répondu en ${CONFIG_API.delaiExpirationMs} ms`,
+    return new NetworkError(
+      "timeout",
+      `Server did not respond within ${API_CONFIG.timeoutMs} ms`,
       cause,
     )
   }
 
-  return new ErreurReseau("hors-ligne", "Serveur injoignable", cause)
+  return new NetworkError("offline", "Server unreachable", cause)
 }
 
-const envoyer = async (options: OptionsRequete<unknown>): Promise<Response> => {
-  const controleur = new AbortController()
-  const minuterie = setTimeout(() => {
-    controleur.abort()
-  }, options.delaiMs ?? CONFIG_API.delaiExpirationMs)
-  const relayerAnnulation = () => {
-    controleur.abort()
+const send = async (options: RequestOptions<unknown>): Promise<Response> => {
+  const controller = new AbortController()
+  const timer = setTimeout(() => {
+    controller.abort()
+  }, options.timeoutMs ?? API_CONFIG.timeoutMs)
+  const forwardAbort = () => {
+    controller.abort()
   }
 
-  options.signal?.addEventListener("abort", relayerAnnulation)
+  options.signal?.addEventListener("abort", forwardAbort)
 
   try {
-    return await fetch(construireUrl(options.chemin, options.parametres), {
-      method: options.methode ?? "GET",
-      headers: construireEntetes(options),
+    return await fetch(buildUrl(options.path, options.params), {
+      method: options.method ?? "GET",
+      headers: buildHeaders(options),
       body:
-        typeof options.corps === "undefined"
+        typeof options.body === "undefined"
           ? null
-          : JSON.stringify(options.corps),
-      signal: controleur.signal,
+          : JSON.stringify(options.body),
+      signal: controller.signal,
     })
   } catch (cause) {
-    throw traduireEchec(cause, options.signal)
+    throw translateFailure(cause, options.signal)
   } finally {
-    clearTimeout(minuterie)
-    options.signal?.removeEventListener("abort", relayerAnnulation)
+    clearTimeout(timer)
+    options.signal?.removeEventListener("abort", forwardAbort)
   }
 }
 
-const lireCorps = async (reponse: Response): Promise<unknown> => {
-  if (reponse.status === 204) {
+const readBody = async (response: Response): Promise<unknown> => {
+  if (response.status === 204) {
     return null
   }
 
-  const texte = await reponse.text()
+  const text = await response.text()
 
-  if (texte.length === 0) {
+  if (text.length === 0) {
     return null
   }
 
   try {
-    return JSON.parse(texte) as unknown
+    return JSON.parse(text) as unknown
   } catch {
-    return texte
+    return text
   }
 }
 
 /**
- * Client HTTP unique : URL de base, en-têtes, délai d'expiration, traduction
- * des erreurs et validation zod de la réponse. Rien d'autre n'appelle fetch.
+ * The single HTTP client: base URL, headers, timeout, error translation and
+ * zod validation of the payload. Nothing else in the app calls fetch.
  */
-export const requeteApi = async <TSortie>(
-  options: OptionsRequete<TSortie>,
-): Promise<TSortie> => {
-  const reponse = await envoyer(options)
-  const corps = await lireCorps(reponse)
+export const apiRequest = async <TOutput>(
+  options: RequestOptions<TOutput>,
+): Promise<TOutput> => {
+  const response = await send(options)
+  const body = await readBody(response)
 
-  if (!reponse.ok) {
-    throw erreurDepuisReponse(reponse.status, corps)
+  if (!response.ok) {
+    throw errorFromResponse(response.status, body)
   }
 
-  const resultat = options.schema.safeParse(corps)
+  const parsed = options.schema.safeParse(body)
 
-  if (!resultat.success) {
-    throw ErreurValidation.depuisZod(
-      resultat.error,
-      `${options.methode ?? "GET"} ${options.chemin}`,
+  if (!parsed.success) {
+    throw ValidationError.fromZod(
+      parsed.error,
+      `${options.method ?? "GET"} ${options.path}`,
     )
   }
 
-  return resultat.data
+  return parsed.data
 }

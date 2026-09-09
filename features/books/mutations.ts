@@ -1,58 +1,58 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { type Ouvrage } from "@/domain/ouvrage"
+import { type Book } from "@/domain/book"
 import {
-  creerOuvrage,
-  modifierOuvrage,
-  remplacerOuvrage,
-  supprimerOuvrage,
-} from "@/services/api/ouvrages"
-import { clesOuvrages } from "./cles"
-import { invaliderOuvrages } from "./invalidation"
+  createBook,
+  deleteBook,
+  patchBook,
+  replaceBook,
+} from "@/services/api/books"
+import { invalidateBooks } from "./invalidation"
+import { bookKeys } from "./keys"
 
-export const useCreerOuvrage = () => {
+export const useCreateBook = () => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: creerOuvrage,
-    onSuccess: async (ouvrage: Ouvrage) => {
-      client.setQueryData(clesOuvrages.detail(ouvrage.id), ouvrage)
-      await invaliderOuvrages(client)
+    mutationFn: createBook,
+    onSuccess: async (book: Book) => {
+      client.setQueryData(bookKeys.detail(book.id), book)
+      await invalidateBooks(client)
     },
   })
 }
 
-export const useRemplacerOuvrage = () => {
+export const useReplaceBook = () => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: remplacerOuvrage,
-    onSuccess: async (ouvrage: Ouvrage) => {
-      client.setQueryData(clesOuvrages.detail(ouvrage.id), ouvrage)
-      await invaliderOuvrages(client, ouvrage.id)
+    mutationFn: replaceBook,
+    onSuccess: async (book: Book) => {
+      client.setQueryData(bookKeys.detail(book.id), book)
+      await invalidateBooks(client, book.id)
     },
   })
 }
 
-export const useModifierOuvrage = () => {
+export const usePatchBook = () => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: modifierOuvrage,
-    onSuccess: async (ouvrage: Ouvrage) => {
-      client.setQueryData(clesOuvrages.detail(ouvrage.id), ouvrage)
-      await invaliderOuvrages(client, ouvrage.id)
+    mutationFn: patchBook,
+    onSuccess: async (book: Book) => {
+      client.setQueryData(bookKeys.detail(book.id), book)
+      await invalidateBooks(client, book.id)
     },
   })
 }
 
-export const useSupprimerOuvrage = () => {
+export const useDeleteBook = () => {
   const client = useQueryClient()
 
   return useMutation({
-    mutationFn: supprimerOuvrage,
-    onSuccess: async (resultat: null, id: string) => {
-      client.removeQueries({ queryKey: clesOuvrages.detail(id) })
-      await invaliderOuvrages(client)
+    mutationFn: deleteBook,
+    onSuccess: async (result: null, id: string) => {
+      client.removeQueries({ queryKey: bookKeys.detail(id) })
+      await invalidateBooks(client)
     },
   })
 }
