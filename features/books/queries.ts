@@ -9,7 +9,7 @@ export const bookListOptions = (filters: BookFilters = {}) => {
 
   return queryOptions({
     queryKey: bookKeys.list(normalized),
-    queryFn: ({ signal }) => listBooks(normalized, signal),
+    queryFn: () => listBooks(normalized),
     placeholderData: keepPreviousData,
   })
 }
@@ -17,7 +17,7 @@ export const bookListOptions = (filters: BookFilters = {}) => {
 export const bookOptions = (id: string) =>
   queryOptions({
     queryKey: bookKeys.detail(id),
-    queryFn: ({ signal }) => getBook(id, signal),
+    queryFn: () => getBook(id),
   })
 
 export const useBooks = (filters: BookFilters = {}) =>

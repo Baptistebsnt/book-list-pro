@@ -50,7 +50,7 @@ export const useDeleteBook = () => {
 
   return useMutation({
     mutationFn: deleteBook,
-    onSuccess: async (result: null, id: string) => {
+    onSuccess: async (result: void, id: string) => {
       client.removeQueries({ queryKey: bookKeys.detail(id) })
       await invalidateBooks(client)
     },

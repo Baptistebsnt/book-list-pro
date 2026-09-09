@@ -1,44 +1,65 @@
-import { z } from "zod"
 import { type Book, type BookDraft, bookSchema } from "@/domain/book"
 import { type NormalizedBookFilters } from "@/domain/book-filters"
 import { type Page, pageSchemaOf } from "@/domain/pagination"
-import { apiRequest } from "./client"
+import { apiClient } from "./client"
+import { parseResponse } from "./validate"
 
 const bookPageSchema = pageSchemaOf(bookSchema)
 
-const noContentSchema = z.null()
-
 export type BookPage = Page<Book>
 
-export const listBooks = (
+/** If-Match lets the API answer 409 instead of silently overwriting a record. */
+const versionHeaders = (version: number): Record<string, string> => ({
+  "If-Match": String(version),
+})
+
+/** Null filters are dropped rather than sent empty: the API expects absence. */
+const listParams = (
   filters: NormalizedBookFilters,
-  signal?: AbortSignal,
-): Promise<BookPage> =>
-  apiRequest({
-    path: "/books",
-    schema: bookPageSchema,
-    params: {
-      page: filters.page,
-      limit: filters.limit,
-      q: filters.q,
-      status: filters.status,
-      favori: filters.favori,
-      sort: filters.sort,
-      order: filters.order,
-    },
-    signal,
+): Record<string, string | number | boolean> => {
+  const params: Record<string, string | number | boolean> = {
+    page: filters.page,
+    limit: filters.limit,
+    sort: filters.sort,
+    order: filters.order,
+  }
+
+  if (filters.q !== null) {
+    params.q = filters.q
+  }
+
+  if (filters.status !== null) {
+    params.status = filters.status
+  }
+
+  if (filters.favori !== null) {
+    params.favori = filters.favori
+  }
+
+  return params
+}
+
+export const listBooks = async (
+  filters: NormalizedBookFilters,
+): Promise<BookPage> => {
+  const data = await apiClient.get<unknown>("/books", {
+    params: listParams(filters),
   })
 
-export const getBook = (id: string, signal?: AbortSignal): Promise<Book> =>
-  apiRequest({ path: `/books/${id}`, schema: bookSchema, signal })
+  return parseResponse(bookPageSchema, data, "GET /books")
+}
 
-export const createBook = (draft: BookDraft): Promise<Book> =>
-  apiRequest({
-    path: "/books",
-    method: "POST",
-    body: draft,
-    schema: bookSchema,
-  })
+export const getBook = async (id: string): Promise<Book> => {
+  const data = await apiClient.get<unknown>(`/books/${id}`)
+
+  return parseResponse(bookSchema, data, "GET /books/:id")
+}
+
+export const createBook = async (draft: BookDraft): Promise<Book> => {
+  const data = await apiClient.post<unknown>("/books", draft)
+
+  return parseResponse(bookSchema, data, "POST /books")
+}
 
 export type BookReplacement = {
   id: string
@@ -46,15 +67,14 @@ export type BookReplacement = {
   draft: BookDraft
 }
 
-/** PUT: full representation, guarded by If-Match (409 when stale). */
-export const replaceBook = (input: BookReplacement): Promise<Book> =>
-  apiRequest({
-    path: `/books/${input.id}`,
-    method: "PUT",
-    body: input.draft,
-    version: input.version,
-    schema: bookSchema,
+/** PUT: full representation, guarded by If-Match. */
+export const replaceBook = async (input: BookReplacement): Promise<Book> => {
+  const data = await apiClient.put<unknown>(`/books/${input.id}`, input.draft, {
+    headers: versionHeaders(input.version),
   })
+
+  return parseResponse(bookSchema, data, "PUT /books/:id")
+}
 
 export type BookPatch = {
   id: string
@@ -63,18 +83,16 @@ export type BookPatch = {
 }
 
 /** PATCH: partial update, used by the read and favourite toggles. */
-export const patchBook = (input: BookPatch): Promise<Book> =>
-  apiRequest({
-    path: `/books/${input.id}`,
-    method: "PATCH",
-    body: input.changes,
-    version: input.version,
-    schema: bookSchema,
-  })
+export const patchBook = async (input: BookPatch): Promise<Book> => {
+  const data = await apiClient.patch<unknown>(
+    `/books/${input.id}`,
+    input.changes,
+    { headers: versionHeaders(input.version) },
+  )
 
-export const deleteBook = (id: string): Promise<null> =>
-  apiRequest({
-    path: `/books/${id}`,
-    method: "DELETE",
-    schema: noContentSchema,
-  })
+  return parseResponse(bookSchema, data, "PATCH /books/:id")
+}
+
+export const deleteBook = async (id: string): Promise<void> => {
+  await apiClient.delete(`/books/${id}`)
+}

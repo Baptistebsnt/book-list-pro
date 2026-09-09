@@ -26,8 +26,8 @@ Contraintes :
    caché élevé et source de conditions de concurrence.
 2. **Redux Toolkit Query** : couvre le besoin, mais impose un store global dont
    nous n'avons pas l'usage pour l'état client.
-3. **TanStack Query** : cache par clé, déduplication, annulation via `signal`,
-   invalidation ciblée, mises à jour optimistes et persistance du cache
+3. **TanStack Query** : cache par clé, déduplication, invalidation ciblée,
+   mises à jour optimistes et persistance du cache
    (`@tanstack/query-async-storage-persister`) prévue nativement pour le lot 4.
 
 ## Décision
@@ -47,9 +47,15 @@ Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
   invalide donc l'ensemble des listes plutôt que d'éditer le cache à l'aveugle.
 - **Réponse fraîche écrite dans le cache détail** (`setQueryData`) pour éviter
   un aller-retour immédiat après une écriture.
-- **Politique de reprise adossée au domaine** : `isAppError` +
-  `isRetryable` — on réessaie un 503 ou une coupure réseau, jamais une
-  validation, un conflit de version ou un refus de rôle.
+- **Politique de reprise adossée aux erreurs de `services/api/errors.ts`** :
+  seul un `NetworkError` marqué `retryable` est rejoué — c'est le cas d'un 503
+  ou d'un délai dépassé. Une validation, un conflit de version ou un refus de
+  rôle rendraient exactement la même réponse au deuxième essai.
+- **Validation à l'exécution en amont du cache** (`services/api/validate.ts`) :
+  le client HTTP renvoie `unknown`, et `parseResponse` refuse l'entrée du cache
+  à tout payload qui ne respecte pas le schéma. Un `ResponseContractError`
+  distingue ce cas d'un 422 : le libraire n'a rien fait de mal, c'est la réponse
+  elle-même qui est inutilisable.
 - **Le `QueryClient` est créé dans `app/_layout.tsx` via `useState`**, pas au
   niveau module : l'export web statique d'Expo évaluerait sinon le même cache
   entre deux rendus.
@@ -69,3 +75,11 @@ on passerait alors à une mise à jour ciblée du cache par page.
 Note : le code est écrit en anglais ; seuls les noms de champs de l'API
 (`titre`, `auteur`, `annee`, `lu`, `favori`, `couverture`...) restent en français,
 car ils appartiennent au contrat réseau et ne nous appartiennent pas.
+
+## Limites connues
+
+Le client HTTP (`services/api/client.ts`, livré par la PR #18) ne transmet pas
+encore le `signal` fourni par TanStack Query : une requête abandonnée continue
+donc jusqu'au bout. Sans effet au lot 1, mais bloquant pour le lot 2, qui exige
+l'annulation de la recherche précédente. À traiter par une issue dédiée, avec
+l'ajout de `signal` à son type `RequestOptions` — axios le transmet déjà.
