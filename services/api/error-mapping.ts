@@ -5,6 +5,7 @@ import {
   AuthError,
   ConflictError,
   NetworkError,
+  NotFoundError,
   ValidationError,
 } from "./errors"
 
@@ -48,6 +49,10 @@ export const mapError = (status: number, rawBody: unknown): AppError => {
       code: data.error,
       message: data.message,
     })
+  }
+
+  if (status === HTTP_STATUS.NOT_FOUND) {
+    return new NotFoundError({ message: data.message })
   }
 
   if (status === HTTP_STATUS.CONFLICT) {
