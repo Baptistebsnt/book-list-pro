@@ -8,9 +8,11 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { ErrorState } from "@/components/ui/error-state"
 import { Loader } from "@/components/ui/loader"
 import { type Book } from "@/domain/book"
+import { useDeferredDeletion } from "@/providers/deferred-deletion"
 import { useInfiniteBooks } from "@/services/query/books"
 
 export const BooksList = () => {
+  const { excludeDeleted } = useDeferredDeletion()
   const {
     data,
     status,
@@ -36,7 +38,7 @@ export const BooksList = () => {
     )
   }
 
-  const books = data.pages.flatMap((page) => page.items)
+  const books = excludeDeleted(data.pages.flatMap((page) => page.items))
   const total = data.pages[0]?.total ?? books.length
 
   if (books.length === 0) {

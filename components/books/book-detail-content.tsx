@@ -34,7 +34,7 @@ export const BookDetailContent = ({ query }: BookDetailContentProps) => {
   return (
     <View className="gap-6">
       <BookDetailCard book={query.data} />
-      <BookDetailActions bookId={query.data.id} />
+      <BookDetailActions book={query.data} />
     </View>
   )
 }
