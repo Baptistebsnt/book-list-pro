@@ -5,7 +5,10 @@ export const MIN_YEAR = 1450
 export const MAX_RATING = 5
 
 const bookYearSchema = z
-  .number()
+  .number({
+    // eslint-disable-next-line camelcase
+    invalid_type_error: "L'annee est requise",
+  })
   .finite("L'annee doit etre un nombre")
   .int("L'annee doit etre un nombre entier")
   .min(MIN_YEAR, `L'annee doit etre posterieure a ${MIN_YEAR}`)
