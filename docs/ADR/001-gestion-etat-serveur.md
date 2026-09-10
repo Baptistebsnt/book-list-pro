@@ -47,6 +47,15 @@ Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
   invalide donc l'ensemble des listes plutôt que d'éditer le cache à l'aveugle.
 - **Réponse fraîche écrite dans le cache détail** (`setQueryData`) pour éviter
   un aller-retour immédiat après une écriture.
+- **Bascule optimiste réservée au coup de cœur** (`useToggleFavorite`) :
+  `favori` est un booléen dont la valeur suivante est connue avant la réponse,
+  contrairement à une édition de fiche. `patchBookInCaches` applique donc la
+  bascule dans toutes les entrées du cache (fiche, liste paginée, liste
+  infinie) après un `cancelQueries`, garde l'instantané pour le restaurer si le
+  serveur refuse, puis réécrit la réponse serveur — `version` comprise — avant
+  l'invalidation habituelle. Le cœur répond au doigt même sous 1,5 s de latence,
+  et un échec se voit : l'état revient en arrière et un « Échec » annoncé en
+  région live accompagne le retour arrière.
 - **Politique de reprise adossée aux erreurs de `services/api/errors.ts`** :
   seul un `NetworkError` marqué `retryable` est rejoué — c'est le cas d'un 503
   ou d'un délai dépassé. Une validation, un conflit de version ou un refus de
