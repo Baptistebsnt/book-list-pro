@@ -1,21 +1,42 @@
-import { Link } from "expo-router"
+import { Link, useRouter } from "expo-router"
 import { View } from "react-native"
+import { DeleteBookDialog } from "@/components/books/delete-book-dialog"
 import { Button } from "@/components/ui/button"
 import { Text } from "@/components/ui/text"
+import { type Book } from "@/domain/book"
+import { useDeferredDeletion } from "@/providers/deferred-deletion"
 
 type BookDetailActionsProps = {
-  bookId: string
+  book: Book
 }
 
-export const BookDetailActions = ({ bookId }: BookDetailActionsProps) => (
-  <View className="gap-3">
-    <Link
-      href={{ pathname: "/books/[id]/edit", params: { id: bookId } }}
-      asChild
-    >
-      <Button>
-        <Text>Modifier la fiche</Text>
-      </Button>
-    </Link>
-  </View>
-)
+export const BookDetailActions = ({ book }: BookDetailActionsProps) => {
+  const router = useRouter()
+  const { requestDeletion } = useDeferredDeletion()
+
+  const confirmDeletion = () => {
+    requestDeletion({ id: book.id, titre: book.titre })
+
+    if (router.canGoBack()) {
+      router.back()
+
+      return
+    }
+
+    router.replace("/")
+  }
+
+  return (
+    <View className="gap-3">
+      <Link
+        href={{ pathname: "/books/[id]/edit", params: { id: book.id } }}
+        asChild
+      >
+        <Button>
+          <Text>Modifier la fiche</Text>
+        </Button>
+      </Link>
+      <DeleteBookDialog titre={book.titre} onConfirm={confirmDeletion} />
+    </View>
+  )
+}
