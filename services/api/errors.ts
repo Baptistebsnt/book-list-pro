@@ -68,3 +68,6 @@ export class AuthError extends AppError {
     this.canReauthenticate = args.code === "jeton_expire"
   }
 }
+
+export const isNotFoundError = (error: unknown): boolean =>
+  error instanceof AppError && error.status === HTTP_STATUS.NOT_FOUND
