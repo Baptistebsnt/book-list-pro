@@ -1,6 +1,5 @@
 import { z } from "zod"
 
-/** Paginated envelope returned by GET /books. */
 export const pageSchemaOf = <TItem extends z.ZodTypeAny>(item: TItem) =>
   z.object({
     items: z.array(item),

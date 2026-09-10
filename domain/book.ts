@@ -4,11 +4,6 @@ export const MIN_YEAR = 1450
 
 export const MAX_RATING = 5
 
-/**
- * Contract of a book as the API returns it (specification appendix).
- * Field names stay French because they are the wire format; this schema is the
- * single source of truth and the type is derived from it, never the opposite.
- */
 export const bookSchema = z.object({
   id: z.string().min(1),
   titre: z.string().min(1),
@@ -26,7 +21,6 @@ export const bookSchema = z.object({
 
 export type Book = z.infer<typeof bookSchema>
 
-/** Fields typed in by the bookseller: the server owns everything else. */
 export const bookDraftSchema = z.object({
   titre: z.string().trim().min(1, "Title is required"),
   auteur: z.string().trim().min(1, "Author is required"),
@@ -53,7 +47,6 @@ export const EMPTY_DRAFT: BookDraft = {
   note: null,
 }
 
-/** Prefills the edit form from an existing record. */
 export const toDraft = (book: Book): BookDraft => ({
   titre: book.titre,
   auteur: book.auteur,

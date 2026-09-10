@@ -1,18 +1,6 @@
 import { type ZodError, type ZodType } from "zod"
 import { AppError } from "./errors"
 
-/**
- * The API answered with a payload that breaks its own contract. This is not a
- * 422: the bookseller did nothing wrong, the response itself is unusable.
- */
-/**
- * The API answered with a payload that breaks its own contract. This is not a
- * 422: the bookseller did nothing wrong, the response itself is unusable, so
- * the interface must show a technical failure rather than per-field messages.
- *
- * `fields` deliberately mirrors the shape of ValidationError so that both
- * carry the same `type` discriminant without contradicting each other.
- */
 export class ResponseContractError extends AppError {
   readonly type = "validation"
 

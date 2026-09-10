@@ -8,12 +8,10 @@ const bookPageSchema = pageSchemaOf(bookSchema)
 
 export type BookPage = Page<Book>
 
-/** If-Match lets the API answer 409 instead of silently overwriting a record. */
 const versionHeaders = (version: number): Record<string, string> => ({
   "If-Match": String(version),
 })
 
-/** Null filters are dropped rather than sent empty: the API expects absence. */
 const listParams = (
   filters: NormalizedBookFilters,
 ): Record<string, string | number | boolean> => {
@@ -67,7 +65,6 @@ export type BookReplacement = {
   draft: BookDraft
 }
 
-/** PUT: full representation, guarded by If-Match. */
 export const replaceBook = async (input: BookReplacement): Promise<Book> => {
   const data = await apiClient.put<unknown>(`/books/${input.id}`, input.draft, {
     headers: versionHeaders(input.version),
@@ -82,7 +79,6 @@ export type BookPatch = {
   changes: Partial<BookDraft>
 }
 
-/** PATCH: partial update, used by the read and favourite toggles. */
 export const patchBook = async (input: BookPatch): Promise<Book> => {
   const data = await apiClient.patch<unknown>(
     `/books/${input.id}`,
