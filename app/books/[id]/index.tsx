@@ -16,7 +16,7 @@ const BookDetailsRoute = () => {
         contentContainerClassName="gap-6 p-4"
         className="bg-background"
       >
-        <BookDetail id={id} query={query} />
+        <BookDetail query={query} />
       </ScrollView>
     </>
   )
