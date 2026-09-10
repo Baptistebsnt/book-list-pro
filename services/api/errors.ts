@@ -1,6 +1,6 @@
 import { type AuthStatus, HTTP_STATUS } from "./constants"
 
-type ErrorType = "network" | "validation" | "conflict" | "auth"
+type ErrorType = "network" | "notFound" | "validation" | "conflict" | "auth"
 
 export abstract class AppError extends Error {
   abstract readonly type: ErrorType
@@ -22,6 +22,17 @@ export class NetworkError extends AppError {
   ) {
     super(args.message ?? "Something went wrong.", args.status)
     this.retryable = args.retryable ?? false
+  }
+}
+
+export class NotFoundError extends AppError {
+  readonly type = "notFound"
+
+  constructor(args: { message?: string } = {}) {
+    super(
+      args.message ?? "This record no longer exists.",
+      HTTP_STATUS.NOT_FOUND,
+    )
   }
 }
 
@@ -68,6 +79,3 @@ export class AuthError extends AppError {
     this.canReauthenticate = args.code === "jeton_expire"
   }
 }
-
-export const isNotFoundError = (error: unknown): boolean =>
-  error instanceof AppError && error.status === HTTP_STATUS.NOT_FOUND

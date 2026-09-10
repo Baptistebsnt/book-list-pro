@@ -5,13 +5,9 @@ import { Text } from "@/components/ui/text"
 
 type BookDetailActionsProps = {
   bookId: string
-  onDelete: () => void
 }
 
-export const BookDetailActions = ({
-  bookId,
-  onDelete,
-}: BookDetailActionsProps) => (
+export const BookDetailActions = ({ bookId }: BookDetailActionsProps) => (
   <View className="gap-3">
     <Link
       href={{ pathname: "/books/[id]/edit", params: { id: bookId } }}
@@ -21,8 +17,5 @@ export const BookDetailActions = ({
         <Text>Modifier la fiche</Text>
       </Button>
     </Link>
-    <Button variant="outline" onPress={onDelete}>
-      <Text>Supprimer l&apos;ouvrage</Text>
-    </Button>
   </View>
 )
