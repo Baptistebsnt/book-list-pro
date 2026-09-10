@@ -5,18 +5,13 @@ export const MIN_YEAR = 1450
 export const MAX_RATING = 5
 
 const bookYearSchema = z
-  .union([z.string().trim().min(1, "L'annee est requise"), z.number()])
-  .transform((value) => (typeof value === "number" ? value : Number(value)))
-  .pipe(
-    z
-      .number()
-      .finite("L'annee doit etre un nombre")
-      .int("L'annee doit etre un nombre entier")
-      .min(MIN_YEAR, `L'annee doit etre posterieure a ${MIN_YEAR}`)
-      .max(
-        new Date().getFullYear() + 1,
-        "L'annee ne peut pas etre aussi loin dans le futur",
-      ),
+  .number()
+  .finite("L'annee doit etre un nombre")
+  .int("L'annee doit etre un nombre entier")
+  .min(MIN_YEAR, `L'annee doit etre posterieure a ${MIN_YEAR}`)
+  .max(
+    new Date().getFullYear() + 1,
+    "L'annee ne peut pas etre aussi loin dans le futur",
   )
 
 export const bookSchema = z.object({
