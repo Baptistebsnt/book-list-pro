@@ -1,5 +1,5 @@
-import { CreateBookForm } from "@/features/books/create-book-form"
+import { AddBookForm } from "@/features/books/add-book-form"
 
-const NewBookRoute = () => <CreateBookForm />
+const NewBookRoute = () => <AddBookForm />
 
 export default NewBookRoute
