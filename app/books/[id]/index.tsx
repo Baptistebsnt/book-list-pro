@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from "expo-router"
 import { ScrollView } from "react-native"
-import { BookDetail } from "@/features/books/components/book-detail"
-import { useBook } from "@/features/books/queries"
+import { BookDetail } from "@/features/books/book-detail"
+import { useBook } from "@/services/query/books"
 
 const FALLBACK_TITLE = "Fiche de l'ouvrage"
 
@@ -16,7 +16,7 @@ const BookDetailsRoute = () => {
         contentContainerClassName="gap-6 p-4"
         className="bg-background"
       >
-        <BookDetail query={query} />
+        <BookDetail id={id} query={query} />
       </ScrollView>
     </>
   )

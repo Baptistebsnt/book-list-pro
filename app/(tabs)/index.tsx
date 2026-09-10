@@ -1,7 +1,7 @@
 import { Link } from "expo-router"
 import { View } from "react-native"
 import { Text } from "@/components/ui/text"
-import { useBooks } from "@/features/books/queries"
+import { useBooks } from "@/services/query/books"
 
 const BooksListRoute = () => {
   const { data } = useBooks({ limit: 1 })
