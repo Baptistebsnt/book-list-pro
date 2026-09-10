@@ -15,8 +15,8 @@ export const ReadToggle = ({ book }: ReadToggleProps) => {
 
   return (
     <Switch
-      value={book.lu}
-      onValueChange={toggle}
+      checked={book.lu}
+      onCheckedChange={toggle}
       disabled={isPending}
       accessibilityLabel={`Marquer « ${book.titre} » comme ${
         book.lu ? "non lu" : "lu"
