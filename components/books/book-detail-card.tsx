@@ -1,4 +1,5 @@
 import { View } from "react-native"
+import { ReadToggle } from "@/components/books/read-toggle"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
 import { cn } from "@/lib/utils"
@@ -42,7 +43,10 @@ export const BookDetailCard = ({ book }: { book: Book }) => (
   <View className="gap-4 rounded-lg border border-border bg-card p-4">
     <View className="gap-3">
       <Text variant="h3">{book.titre}</Text>
-      <ReadingStatus lu={book.lu} />
+      <View className="flex-row items-center justify-between gap-3">
+        <ReadingStatus lu={book.lu} />
+        <ReadToggle book={book} />
+      </View>
     </View>
     <View>
       <DetailRow label="Auteur" value={orMissing(book.auteur)} />
