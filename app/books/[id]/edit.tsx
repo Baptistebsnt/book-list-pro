@@ -1,24 +1,21 @@
-import { Link, Stack, useLocalSearchParams } from "expo-router"
-import { Text, View } from "react-native"
+import { Stack, useLocalSearchParams } from "expo-router"
+import { BookEdit } from "@/features/books/book-edit"
+import { useBook } from "@/services/query/books"
+
+const FALLBACK_TITLE = "Modifier l'ouvrage"
 
 const EditBookRoute = () => {
   const { id } = useLocalSearchParams<{ id: string }>()
+  const { data } = useBook(id)
 
   return (
     <>
-      <Stack.Screen options={{ title: id }} />
-      <View>
-        <Text>Modifier un ouvrage</Text>
-        <Text>Identifiant : {id}</Text>
-        <Link
-          href={{
-            pathname: "/books/[id]",
-            params: { id },
-          }}
-        >
-          Annuler et revenir à la fiche
-        </Link>
-      </View>
+      <Stack.Screen
+        options={{
+          title: data ? `Modifier « ${data.titre} »` : FALLBACK_TITLE,
+        }}
+      />
+      <BookEdit id={id} />
     </>
   )
 }
