@@ -1,0 +1,8 @@
+echo "→ typecheck"
+npm run typecheck || exit 1
+
+echo "→ prettier format check"
+npm run format:check || exit 1
+
+echo "→ eslint"
+npm run lint || exit 1
