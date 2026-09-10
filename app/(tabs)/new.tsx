@@ -1,11 +1,5 @@
-import { Link } from "expo-router"
-import { Text, View } from "react-native"
+import { CreateBookForm } from "@/features/books/create-book-form"
 
-const NewBookRoute = () => (
-  <View>
-    <Text>Ajouter un ouvrage</Text>
-    <Link href="/">Annuler et revenir à la liste</Link>
-  </View>
-)
+const NewBookRoute = () => <CreateBookForm />
 
 export default NewBookRoute
