@@ -54,8 +54,7 @@ function Text({
 }: React.ComponentProps<typeof RNText> & TextVariantProps) {
   const textClass = React.useContext(TextClassContext)
 
-  
-return (
+  return (
     <RNText
       className={cn(textVariants({ variant }), textClass, className)}
       role={variant ? ROLE[variant] : undefined}

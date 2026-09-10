@@ -1,8 +1,8 @@
 import {
   type Book,
   type BookDraft,
-  bookSchema,
   type NormalizedBookFilters,
+  bookSchema,
 } from "@/domain/book"
 import { type Page, pageSchemaOf } from "@/domain/pagination"
 import { apiClient } from "./client"
