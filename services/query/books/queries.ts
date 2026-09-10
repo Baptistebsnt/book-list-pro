@@ -15,7 +15,7 @@ export const bookListOptions = (filters: BookFilters = {}) => {
 
   return queryOptions({
     queryKey: bookKeys.list(normalized),
-    queryFn: () => listBooks(normalized),
+    queryFn: ({ signal }) => listBooks(normalized, { signal }),
     placeholderData: keepPreviousData,
   })
 }
@@ -25,7 +25,8 @@ export const bookInfiniteListOptions = (filters: BookFilters = {}) => {
 
   return infiniteQueryOptions({
     queryKey: bookKeys.infiniteList(normalized),
-    queryFn: ({ pageParam }) => listBooks({ ...normalized, page: pageParam }),
+    queryFn: ({ pageParam, signal }) =>
+      listBooks({ ...normalized, page: pageParam }, { signal }),
     initialPageParam: normalized.page,
     getNextPageParam: (lastPage) =>
       hasNextPage(lastPage) ? lastPage.page + 1 : null,
@@ -35,7 +36,7 @@ export const bookInfiniteListOptions = (filters: BookFilters = {}) => {
 export const bookOptions = (id: string) =>
   queryOptions({
     queryKey: bookKeys.detail(id),
-    queryFn: () => getBook(id),
+    queryFn: ({ signal }) => getBook(id, { signal }),
   })
 
 export const useBooks = (filters: BookFilters = {}) =>
