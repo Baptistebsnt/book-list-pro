@@ -4,14 +4,14 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useColorScheme } from "nativewind"
-import { useState } from "react"
 import { NAV_THEME } from "@/lib/theme"
 import { createQueryClient } from "@/services/query/client"
 import "../global.css"
 
+const queryClient = createQueryClient()
+
 const RootLayout = () => {
   const { colorScheme } = useColorScheme()
-  const [queryClient] = useState(createQueryClient)
 
   return (
     <QueryClientProvider client={queryClient}>
