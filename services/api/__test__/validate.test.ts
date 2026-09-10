@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { z } from "zod"
-import { ResponseContractError, parseResponse } from "./validate"
+import { ResponseContractError, parseResponse } from "../validate"
 
 const schema = z.object({
   id: z.string(),

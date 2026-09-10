@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { type Page } from "./schema"
-import { hasNextPage } from "./utils"
+import { type Page } from "../schema"
+import { hasNextPage } from "../utils"
 
 const page = (overrides: Partial<Page<unknown>>): Page<unknown> => ({
   items: [],

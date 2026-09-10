@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest"
-import { bookFiltersSchema } from "./filters"
-import { type Book } from "./schema"
+import { bookFiltersSchema } from "../filters"
+import { type Book } from "../schema"
 import {
   EMPTY_DRAFT,
   diffDraft,
   hasActiveFilter,
   normalizeFilters,
   toDraft,
-} from "./utils"
+} from "../utils"
 
 const book: Book = {
   id: "book-1",

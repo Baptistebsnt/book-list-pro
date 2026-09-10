@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { noteDraftSchema, noteSchema } from "./schema"
+import { noteDraftSchema, noteSchema } from "../schema"
 
 const validNote = {
   id: "note-1",

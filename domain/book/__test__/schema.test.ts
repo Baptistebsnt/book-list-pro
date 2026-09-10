@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { MAX_RATING, MIN_YEAR, bookDraftSchema, bookSchema } from "./schema"
+import { MAX_RATING, MIN_YEAR, bookDraftSchema, bookSchema } from "../schema"
 
 const validBook = {
   id: "book-1",

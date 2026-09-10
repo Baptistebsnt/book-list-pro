@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { ErrorState } from "./error-state"
+import { ErrorState } from "../error-state"
 
 describe("ErrorState", () => {
   it("renders the default error copy", () => {

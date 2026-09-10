@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
-import { ReadBadge } from "./read-badge"
+import { ReadBadge } from "../read-badge"
 
 describe("ReadBadge", () => {
   it("shows 'Lu' when the book is read", () => {
