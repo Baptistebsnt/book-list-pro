@@ -29,6 +29,32 @@ npm install && npm run seed && npm start   # dans api-books-v2/
 
 Décisions d'architecture : [`docs/ADR/`](docs/ADR).
 
+## Tests
+
+Le socle de tests utilise [Vitest](https://vitest.dev/) et
+[Testing Library](https://testing-library.com/). Les composants React Native
+sont rendus via `react-native-web` dans un environnement `jsdom`, et les hooks
+de données sont testés contre une API simulée avec [MSW](https://mswjs.io/).
+
+| Script                  | Commande                | Usage                                                                                                                                      |
+| ----------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm test`              | `vitest run`            | Exécute toute la suite **une seule fois** puis rend la main (code de sortie ≠ 0 si un test échoue). C'est la commande utilisée en CI.      |
+| `npm run test:watch`    | `vitest`                | Lance Vitest en **mode watch** : le process reste ouvert et ré-exécute uniquement les tests impactés à chaque sauvegarde. Pour développer. |
+| `npm run test:coverage` | `vitest run --coverage` | Comme `npm test`, mais génère en plus un **rapport de couverture** (terminal + dossier `coverage/`) sur `domain/` et `services/`.          |
+
+```bash
+npm test             # toute la suite, une fois (CI)
+npm run test:watch   # mode watch, pour développer
+npm run test:coverage # une fois + rapport de couverture
+```
+
+Les tests sont co-localisés avec le code (`*.test.ts` / `*.test.tsx`). Ils
+couvrent la validation zod du domaine (`domain/`), le mapping d'erreurs et la
+validation des réponses (`services/`), un composant d'état de données
+(`ErrorState`) et le hook de liste paginée. La configuration vit dans
+`vitest.config.ts` ; les stubs de modules natifs (SVG, nativewind) sont dans
+`test/stubs/`.
+
 ## Get started
 
 1. Install dependencies
