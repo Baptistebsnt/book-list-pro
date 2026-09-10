@@ -1,25 +1,28 @@
-import { Link, useLocalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
+import { Link, Stack, useLocalSearchParams } from "expo-router"
+import { Text, View } from "react-native"
 
-export default function BookDetailsRoute() {
-    const { id } = useLocalSearchParams<{ id: string }>();
+const BookDetailsRoute = () => {
+  const { id } = useLocalSearchParams<{ id: string }>()
 
-    return (
-        <View>
-            <Text>Fiche détaillée</Text>
-            <Text>Identifiant : {id}</Text>
-            <Link
-                href={{
-                pathname: '/books/[id]/edit',
-                params: { id },
-                }}
-            >
-                Modifier cet ouvrage
-            </Link>
+  return (
+    <>
+      <Stack.Screen options={{ title: id }} />
+      <View>
+        <Text>Fiche détaillée</Text>
+        <Text>Identifiant : {id}</Text>
+        <Link
+          href={{
+            pathname: "/books/[id]/edit",
+            params: { id },
+          }}
+        >
+          Modifier cet ouvrage
+        </Link>
 
-            <Link href="/books">
-                Retour à la liste
-            </Link>
-        </View>
-    );
+        <Link href="/">Retour à la liste</Link>
+      </View>
+    </>
+  )
 }
+
+export default BookDetailsRoute
