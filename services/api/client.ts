@@ -4,10 +4,11 @@ import {
   type AxiosResponse,
   create,
   isAxiosError,
+  isCancel,
 } from "axios"
 import { REQUEST_TIMEOUT_MS, config } from "./config"
 import { mapError } from "./error-mapping"
-import { AppError, NetworkError } from "./errors"
+import { AppError, CancelledError, NetworkError } from "./errors"
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
@@ -17,6 +18,7 @@ type RequestOptions = {
   headers?: Record<string, string>
   params?: Record<string, string | number | boolean | undefined>
   timeout?: number
+  signal?: AbortSignal
 }
 
 const http: AxiosInstance = create({
@@ -28,6 +30,10 @@ const http: AxiosInstance = create({
 const formatError = (error: unknown): AppError => {
   if (error instanceof AppError) {
     return error
+  }
+
+  if (isCancel(error)) {
+    return new CancelledError()
   }
 
   if (isAxiosError(error)) {
@@ -52,13 +58,17 @@ const send = async <T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<AxiosResponse<T>> => {
-  const { body } = options
+  const { body, method, headers, params, timeout, signal } = options
 
   try {
     return await http.request<T>({
       url: path,
       data: body,
-      ...options,
+      method,
+      headers,
+      params,
+      timeout,
+      signal,
     })
   } catch (error) {
     throw formatError(error)

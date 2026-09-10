@@ -1,6 +1,7 @@
 import { type AuthStatus, HTTP_STATUS } from "./constants"
 
-type ErrorType = "network" | "notFound" | "validation" | "conflict" | "auth"
+type ErrorType =
+  "network" | "notFound" | "validation" | "conflict" | "auth" | "cancelled"
 
 export abstract class AppError extends Error {
   abstract readonly type: ErrorType
@@ -10,6 +11,14 @@ export abstract class AppError extends Error {
     super(message)
     this.name = new.target.name
     this.status = status
+  }
+}
+
+export class CancelledError extends AppError {
+  readonly type = "cancelled"
+
+  constructor(args: { message?: string } = {}) {
+    super(args.message ?? "Request cancelled.")
   }
 }
 

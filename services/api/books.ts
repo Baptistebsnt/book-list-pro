@@ -12,6 +12,10 @@ const bookPageSchema = pageSchemaOf(bookSchema)
 
 export type BookPage = Page<Book>
 
+export type ReadOptions = {
+  signal?: AbortSignal
+}
+
 const versionHeaders = (version: number): Record<string, string> => ({
   "If-Match": String(version),
 })
@@ -43,16 +47,23 @@ const listParams = (
 
 export const listBooks = async (
   filters: NormalizedBookFilters,
+  options: ReadOptions = {},
 ): Promise<BookPage> => {
   const data = await apiClient.get<unknown>("/books", {
     params: listParams(filters),
+    signal: options.signal,
   })
 
   return parseResponse(bookPageSchema, data, "GET /books")
 }
 
-export const getBook = async (id: string): Promise<Book> => {
-  const data = await apiClient.get<unknown>(`/books/${id}`)
+export const getBook = async (
+  id: string,
+  options: ReadOptions = {},
+): Promise<Book> => {
+  const data = await apiClient.get<unknown>(`/books/${id}`, {
+    signal: options.signal,
+  })
 
   return parseResponse(bookSchema, data, "GET /books/:id")
 }

@@ -78,8 +78,12 @@ car ils appartiennent au contrat réseau et ne nous appartiennent pas.
 
 ## Limites connues
 
-Le client HTTP (`services/api/client.ts`, livré par la PR #18) ne transmet pas
-encore le `signal` fourni par TanStack Query : une requête abandonnée continue
-donc jusqu'au bout. Sans effet au lot 1, mais bloquant pour le lot 2, qui exige
-l'annulation de la recherche précédente. À traiter par une issue dédiée, avec
-l'ajout de `signal` à son type `RequestOptions` — axios le transmet déjà.
+_Aucune à ce jour._
+
+L'annulation, listée ici jusqu'au lot 2, est résolue : `RequestOptions` accepte
+un `signal`, transmis tel quel à axios, et chaque `queryFn` de lecture propage
+celui fourni par TanStack Query. Une requête abandonnée lève une
+`CancelledError` — un `AppError` non rejouable — que le retryer de TanStack
+Query écarte : ni écriture dans le cache, ni erreur affichée. Les mutations ne
+reçoivent pas de signal : une écriture partie ne doit pas être interrompue par
+un démontage d'écran.
