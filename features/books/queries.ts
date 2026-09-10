@@ -1,4 +1,4 @@
-import { type BookFilters, normalizeFilters } from "@/domain/book-filters"
+import { type BookFilters, normalizeFilters } from "@/domain/book"
 import { getBook, listBooks } from "@/services/api/books"
 import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query"
 import { bookKeys } from "./keys"

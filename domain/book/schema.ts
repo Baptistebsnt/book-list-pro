@@ -36,23 +36,3 @@ export const bookDraftSchema = z.object({
 })
 
 export type BookDraft = z.infer<typeof bookDraftSchema>
-
-export const EMPTY_DRAFT: BookDraft = {
-  titre: "",
-  auteur: "",
-  editeur: "",
-  annee: new Date().getFullYear(),
-  lu: false,
-  favori: false,
-  note: null,
-}
-
-export const toDraft = (book: Book): BookDraft => ({
-  titre: book.titre,
-  auteur: book.auteur,
-  editeur: book.editeur,
-  annee: book.annee,
-  lu: book.lu,
-  favori: book.favori,
-  note: book.note,
-})

@@ -16,6 +16,3 @@ export type Page<TItem> = {
   total: number
   totalPages: number
 }
-
-export const hasNextPage = (page: Page<unknown>): boolean =>
-  page.page < page.totalPages

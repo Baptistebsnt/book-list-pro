@@ -22,10 +22,3 @@ export const bookFiltersSchema = z.object({
 export type BookFilters = z.input<typeof bookFiltersSchema>
 
 export type NormalizedBookFilters = z.output<typeof bookFiltersSchema>
-
-export const normalizeFilters = (
-  filters: BookFilters = {},
-): NormalizedBookFilters => bookFiltersSchema.parse(filters)
-
-export const hasActiveFilter = (filters: NormalizedBookFilters): boolean =>
-  filters.q !== null || filters.status !== null || filters.favori !== null

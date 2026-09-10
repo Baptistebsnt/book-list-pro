@@ -1,5 +1,9 @@
-import { type Book, type BookDraft, bookSchema } from "@/domain/book"
-import { type NormalizedBookFilters } from "@/domain/book-filters"
+import {
+  type Book,
+  type BookDraft,
+  bookSchema,
+  type NormalizedBookFilters,
+} from "@/domain/book"
 import { type Page, pageSchemaOf } from "@/domain/pagination"
 import { apiClient } from "./client"
 import { parseResponse } from "./validate"

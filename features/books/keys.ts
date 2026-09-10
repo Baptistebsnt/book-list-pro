@@ -1,4 +1,4 @@
-import { type NormalizedBookFilters } from "@/domain/book-filters"
+import { type NormalizedBookFilters } from "@/domain/book"
 
 export const bookKeys = {
   root: ["books"] as const,
