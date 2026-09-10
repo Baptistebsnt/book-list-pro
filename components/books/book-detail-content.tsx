@@ -4,7 +4,7 @@ import { BookDetailActions } from "@/components/books/book-detail-actions"
 import { BookDetailCard } from "@/components/books/book-detail-card"
 import { BookDetailSkeleton } from "@/components/books/book-detail-skeleton"
 import { BookNotFoundState } from "@/components/books/book-not-found-state"
-import { ErrorState } from "@/components/error-state"
+import { ErrorState } from "@/components/ui/error-state"
 import { type Book } from "@/domain/book"
 import { NotFoundError } from "@/services/api/errors"
 

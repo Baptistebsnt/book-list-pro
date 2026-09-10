@@ -1,25 +1,29 @@
+import { TriangleAlert } from "lucide-react-native"
 import { Button } from "@/components/ui/button"
-import { Centered } from "@/components/ui/centered"
+import { StateView } from "@/components/ui/state-view"
 import { Text } from "@/components/ui/text"
 
 type ErrorStateProps = {
-  message: string
-  refetch: () => void
+  onRetry: () => void
   title?: string
+  description?: string
+  isRetrying?: boolean
 }
 
+const DEFAULT_TITLE = "Impossible d'afficher ces données"
+
+const DEFAULT_DESCRIPTION =
+  "Le serveur n'a pas répondu. Vérifiez la connexion de la boutique, puis réessayez."
+
 export const ErrorState = ({
-  message,
-  refetch,
-  title = "Une erreur est survenue",
+  onRetry,
+  title = DEFAULT_TITLE,
+  description = DEFAULT_DESCRIPTION,
+  isRetrying = false,
 }: ErrorStateProps) => (
-  <Centered>
-    <Text variant="large">{title}</Text>
-    <Text variant="muted" className="text-center">
-      {message}
-    </Text>
-    <Button onPress={() => refetch()}>
-      <Text>Réessayer</Text>
+  <StateView icon={TriangleAlert} title={title} description={description}>
+    <Button variant="outline" onPress={onRetry} disabled={isRetrying}>
+      <Text>{isRetrying ? "Nouvel essai…" : "Réessayer"}</Text>
     </Button>
-  </Centered>
+  </StateView>
 )

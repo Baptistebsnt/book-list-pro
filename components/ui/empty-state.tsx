@@ -1,14 +1,21 @@
-import { Centered } from "@/components/ui/centered"
-import { Text } from "@/components/ui/text"
+import { Inbox, type LucideIcon } from "lucide-react-native"
+import { type ReactNode } from "react"
+import { StateView } from "@/components/ui/state-view"
 
 type EmptyStateProps = {
   title: string
-  message?: string
+  description: string
+  icon?: LucideIcon
+  children?: ReactNode
 }
 
-export const EmptyState = ({ title, message }: EmptyStateProps) => (
-  <Centered>
-    <Text variant="large">{title}</Text>
-    {message ? <Text variant="muted">{message}</Text> : null}
-  </Centered>
+export const EmptyState = ({
+  title,
+  description,
+  icon = Inbox,
+  children,
+}: EmptyStateProps) => (
+  <StateView icon={icon} title={title} description={description}>
+    {children}
+  </StateView>
 )
