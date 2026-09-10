@@ -5,7 +5,7 @@ import { noteKeys } from "./keys"
 export const noteListOptions = (bookId: string) =>
   queryOptions({
     queryKey: noteKeys.list(bookId),
-    queryFn: () => listNotes(bookId),
+    queryFn: ({ signal }) => listNotes(bookId, { signal }),
   })
 
 export const useNotes = (bookId: string) => useQuery(noteListOptions(bookId))
