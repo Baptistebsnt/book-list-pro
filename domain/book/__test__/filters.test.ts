@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { DEFAULT_LIMIT, bookFiltersSchema } from "./filters"
+import { DEFAULT_LIMIT, bookFiltersSchema } from "../filters"
 
 describe("bookFiltersSchema", () => {
   it("fills in defaults for an empty filter set", () => {

@@ -4,7 +4,7 @@ import { setupServer } from "msw/node"
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import { makeBook } from "@/test/factories"
 import { createQueryWrapper } from "@/test/query"
-import { useBooks, useInfiniteBooks } from "./queries"
+import { useBooks, useInfiniteBooks } from "../queries"
 
 const BOOKS_URL = "http://localhost:3000/books"
 

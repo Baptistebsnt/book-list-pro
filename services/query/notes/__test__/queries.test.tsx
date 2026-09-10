@@ -12,9 +12,9 @@ import {
 } from "vitest"
 import { makeNote } from "@/test/factories"
 import { createQueryWrapper } from "@/test/query"
-import { noteKeys } from "./keys"
-import { useCreateNote, useDeleteNote } from "./mutations"
-import { useNotes } from "./queries"
+import { noteKeys } from "../keys"
+import { useCreateNote, useDeleteNote } from "../mutations"
+import { useNotes } from "../queries"
 
 const BOOK_ID = "book-1"
 const NOTES_URL = `http://localhost:3000/books/${BOOK_ID}/notes`

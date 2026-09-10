@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest"
-import { HTTP_STATUS } from "./constants"
-import { mapError } from "./error-mapping"
+import { HTTP_STATUS } from "../constants"
+import { mapError } from "../error-mapping"
 import {
   AuthError,
   ConflictError,
   NetworkError,
   NotFoundError,
   ValidationError,
-} from "./errors"
+} from "../errors"
 
 describe("mapError", () => {
   it("maps 401 to an auth error", () => {
