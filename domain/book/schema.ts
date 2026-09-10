@@ -4,6 +4,21 @@ export const MIN_YEAR = 1450
 
 export const MAX_RATING = 5
 
+const bookYearSchema = z
+  .union([z.string().trim().min(1, "L'annee est requise"), z.number()])
+  .transform((value) => (typeof value === "number" ? value : Number(value)))
+  .pipe(
+    z
+      .number()
+      .finite("L'annee doit etre un nombre")
+      .int("L'annee doit etre un nombre entier")
+      .min(MIN_YEAR, `L'annee doit etre posterieure a ${MIN_YEAR}`)
+      .max(
+        new Date().getFullYear() + 1,
+        "L'annee ne peut pas etre aussi loin dans le futur",
+      ),
+  )
+
 export const bookSchema = z.object({
   id: z.string().min(1),
   titre: z.string().min(1),
@@ -22,14 +37,10 @@ export const bookSchema = z.object({
 export type Book = z.infer<typeof bookSchema>
 
 export const bookDraftSchema = z.object({
-  titre: z.string().trim().min(1, "Title is required"),
-  auteur: z.string().trim().min(1, "Author is required"),
-  editeur: z.string().trim().min(1, "Publisher is required"),
-  annee: z
-    .number()
-    .int("Year must be a whole number")
-    .min(MIN_YEAR, `Year must be after ${MIN_YEAR}`)
-    .max(new Date().getFullYear() + 1, "Year cannot be that far in the future"),
+  titre: z.string().trim().min(1, "Le titre est requis"),
+  auteur: z.string().trim().min(1, "L'auteur est requis"),
+  editeur: z.string().trim().min(1, "L'editeur est requis"),
+  annee: bookYearSchema,
   lu: z.boolean(),
   favori: z.boolean(),
   note: z.number().int().min(0).max(MAX_RATING).nullable(),
