@@ -8,6 +8,9 @@ export const bookKeys = {
   list: (filters: NormalizedBookFilters) =>
     [...bookKeys.lists(), filters] as const,
 
+  infiniteList: (filters: NormalizedBookFilters) =>
+    [...bookKeys.lists(), "infinite", filters] as const,
+
   details: () => [...bookKeys.root, "detail"] as const,
 
   detail: (id: string) => [...bookKeys.details(), id] as const,
