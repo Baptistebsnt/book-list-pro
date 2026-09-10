@@ -28,7 +28,6 @@ export class ResponseContractError extends AppError {
     return fields
   }
 
-  /** Actionable diagnostic: every offending field and its reason. */
   get details(): string {
     return Object.entries(this.fields)
       .map(([field, message]) => `${field}: ${message}`)
@@ -36,10 +35,6 @@ export class ResponseContractError extends AppError {
   }
 }
 
-/**
- * Runtime gate between the HTTP client and the rest of the app: nothing enters
- * the cache without having been validated by zod first.
- */
 export const parseResponse = <TOutput>(
   schema: ZodType<TOutput>,
   data: unknown,

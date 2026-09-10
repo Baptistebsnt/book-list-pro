@@ -1,9 +1,8 @@
-import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query"
 import { type BookFilters, normalizeFilters } from "@/domain/book-filters"
 import { getBook, listBooks } from "@/services/api/books"
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query"
 import { bookKeys } from "./keys"
 
-/** `keepPreviousData` avoids emptying the list on every page change. */
 export const bookListOptions = (filters: BookFilters = {}) => {
   const normalized = normalizeFilters(filters)
 
