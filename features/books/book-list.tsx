@@ -4,9 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { BookListFooter } from "@/components/books/book-list-footer"
 import { BookListHeader } from "@/components/books/book-list-header"
 import { BookListItem } from "@/components/books/book-list-item"
+import { BookListSkeleton } from "@/components/books/book-list-skeleton"
+import { Centered } from "@/components/ui/centered"
 import { EmptyState } from "@/components/ui/empty-state"
 import { ErrorState } from "@/components/ui/error-state"
-import { Loader } from "@/components/ui/loader"
 import { type Book } from "@/domain/book"
 import { useDeferredDeletion } from "@/providers/deferred-deletion"
 import { useInfiniteBooks } from "@/services/query/books"
@@ -16,7 +17,6 @@ export const BooksList = () => {
   const {
     data,
     status,
-    error,
     refetch,
     isRefetching,
     fetchNextPage,
@@ -25,16 +25,18 @@ export const BooksList = () => {
   } = useInfiniteBooks()
 
   if (status === "pending") {
-    return <Loader />
+    return <BookListSkeleton />
   }
 
   if (status === "error") {
     return (
-      <ErrorState
-        title="Impossible de charger le fonds"
-        message={error.message}
-        refetch={refetch}
-      />
+      <Centered>
+        <ErrorState
+          title="Impossible de charger le fonds"
+          onRetry={() => void refetch()}
+          isRetrying={isRefetching}
+        />
+      </Centered>
     )
   }
 
@@ -43,10 +45,12 @@ export const BooksList = () => {
 
   if (books.length === 0) {
     return (
-      <EmptyState
-        title="Aucun ouvrage"
-        message="Le fonds est vide pour le moment."
-      />
+      <Centered>
+        <EmptyState
+          title="Aucun ouvrage"
+          description="Le fonds est vide pour le moment. Ajoutez un premier ouvrage pour démarrer le catalogue."
+        />
+      </Centered>
     )
   }
 
