@@ -1,16 +1,27 @@
+import { Alert } from "react-native"
 import { Switch } from "@/components/ui/switch"
 import { type Book } from "@/domain/book"
-import { usePatchBook } from "@/services/query/books"
+import { useToggleReadStatus } from "@/services/query/books"
 
 type ReadToggleProps = {
   book: Book
 }
 
 export const ReadToggle = ({ book }: ReadToggleProps) => {
-  const { mutate, isPending } = usePatchBook()
+  const { mutate, isPending } = useToggleReadStatus()
 
   const toggle = (lu: boolean) => {
-    mutate({ id: book.id, version: book.version, changes: { lu } })
+    mutate(
+      { id: book.id, version: book.version, lu },
+      {
+        onError: () => {
+          Alert.alert(
+            "Statut non enregistré",
+            `Impossible de mettre à jour « ${book.titre} ». Réessayez plus tard.`,
+          )
+        },
+      },
+    )
   }
 
   return (
