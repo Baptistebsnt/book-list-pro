@@ -20,11 +20,11 @@ export function ThemedText({
     <Text
       style={[
         { color },
-        type === "default" ? styles.default : undefined,
-        type === "title" ? styles.title : undefined,
-        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-        type === "subtitle" ? styles.subtitle : undefined,
-        type === "link" ? styles.link : undefined,
+        type === "default" && styles.default,
+        type === "title" && styles.title,
+        type === "defaultSemiBold" && styles.defaultSemiBold,
+        type === "subtitle" && styles.subtitle,
+        type === "link" && styles.link,
         style,
       ]}
       {...rest}

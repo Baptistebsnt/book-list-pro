@@ -1,5 +1,5 @@
-import { AppError, NetworkError } from "@/services/api/errors"
 import { QueryClient } from "@tanstack/react-query"
+import { AppError, NetworkError } from "@/services/api/errors"
 
 const MAX_ATTEMPTS = 3
 
