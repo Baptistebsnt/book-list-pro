@@ -34,7 +34,7 @@ Contraintes :
 
 Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
 
-- **Clés structurées et hiérarchiques** (`features/books/keys.ts`) :
+- **Clés structurées et hiérarchiques** (`services/query/books/keys.ts`) :
   `["books"]` > `["books","list"]` > `["books","list",filters]` et
   `["books","detail",id]`. Invalider un préfixe invalide toute sa
   descendance.
