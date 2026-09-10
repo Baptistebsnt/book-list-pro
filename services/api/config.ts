@@ -5,7 +5,7 @@ const schema = z.object({
 })
 
 export const config = schema.parse({
-  baseUrl: process.env.EXPO_PUBLIC_API_URL as string,
+  baseUrl: process.env.EXPO_PUBLIC_API_URL!,
 })
 
 export const REQUEST_TIMEOUT_MS = 10_000
