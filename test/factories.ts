@@ -1,4 +1,5 @@
 import { type Book } from "@/domain/book"
+import { type Note } from "@/domain/note"
 import { type BookPage } from "@/services/api/books"
 
 let sequence = 0
@@ -19,6 +20,18 @@ export const makeBook = (overrides: Partial<Book> = {}): Book => {
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2024-01-01T00:00:00.000Z",
     version: 1,
+    ...overrides,
+  }
+}
+
+export const makeNote = (overrides: Partial<Note> = {}): Note => {
+  sequence += 1
+
+  return {
+    id: `note-${sequence}`,
+    livreId: "book-1",
+    contenu: `Note ${sequence}`,
+    createdAt: "2024-01-01T00:00:00.000Z",
     ...overrides,
   }
 }
