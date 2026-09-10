@@ -97,6 +97,53 @@ export const useToggleFavorite = () => {
   })
 }
 
+export type ReadStatusToggle = {
+  id: string
+  version: number
+  lu: boolean
+}
+
+type ReadStatusContext = {
+  snapshot: BookCacheSnapshot
+}
+
+export const useToggleReadStatus = () => {
+  const client = useQueryClient()
+
+  return useMutation<Book, Error, ReadStatusToggle, ReadStatusContext>({
+    mutationFn: ({ id, version, lu }: ReadStatusToggle) =>
+      patchBook({ id, version, changes: { lu } }),
+
+    onMutate: async ({ id, lu }: ReadStatusToggle) => {
+      await client.cancelQueries({ queryKey: bookKeys.root })
+
+      return { snapshot: patchBookInCaches(client, id, { lu }) }
+    },
+
+    onError: (
+      error: Error,
+      variables: ReadStatusToggle,
+      context: ReadStatusContext | undefined,
+    ) => {
+      if (context) {
+        restoreBookCaches(client, context.snapshot)
+      }
+    },
+
+    onSuccess: (book: Book) => {
+      patchBookInCaches(client, book.id, book)
+    },
+
+    onSettled: async (
+      book: Book | undefined,
+      error: Error | null,
+      variables: ReadStatusToggle,
+    ) => {
+      await invalidateBooks(client, variables.id)
+    },
+  })
+}
+
 export const useDeleteBook = () => {
   const client = useQueryClient()
 
