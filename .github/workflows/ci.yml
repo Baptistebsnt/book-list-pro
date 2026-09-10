@@ -39,3 +39,14 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/setup
+
+      - name: Test
+        run: npm test

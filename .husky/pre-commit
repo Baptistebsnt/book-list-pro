@@ -6,3 +6,6 @@ npm run format:check || exit 1
 
 echo "→ eslint"
 npm run lint || exit 1
+
+echo "→ tests"
+npm test || exit 1

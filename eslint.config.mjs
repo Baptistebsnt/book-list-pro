@@ -16,6 +16,7 @@ export default defineConfig([
       "expo-env.d.ts",
       "nativewind-env.d.ts",
       "scripts/**",
+      "coverage/**",
       "**/*.config.*",
     ],
   },
