@@ -1,25 +1,10 @@
-import { Stack, useLocalSearchParams } from "expo-router"
-import { ScrollView } from "react-native"
+import { useLocalSearchParams } from "expo-router"
 import { BookDetail } from "@/features/books/book-detail"
-import { useBook } from "@/services/query/books"
-
-const FALLBACK_TITLE = "Fiche de l'ouvrage"
 
 const BookDetailsRoute = () => {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const query = useBook(id)
 
-  return (
-    <>
-      <Stack.Screen options={{ title: query.data?.titre ?? FALLBACK_TITLE }} />
-      <ScrollView
-        contentContainerClassName="gap-6 p-4"
-        className="bg-background"
-      >
-        <BookDetail query={query} />
-      </ScrollView>
-    </>
-  )
+  return <BookDetail id={id} />
 }
 
 export default BookDetailsRoute
