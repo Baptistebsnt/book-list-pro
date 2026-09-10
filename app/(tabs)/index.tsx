@@ -1,24 +1,5 @@
-import { Link } from "expo-router"
-import { View } from "react-native"
-import { Text } from "@/components/ui/text"
-import { useBooks } from "@/services/query/books"
+import { BooksList } from "@/features/books/book-list"
 
-const BooksListRoute = () => {
-  const { data } = useBooks({ limit: 1 })
-  const book = data?.items[0]
+const BooksScreen = () => <BooksList />
 
-  return (
-    <View className="gap-3 p-4">
-      <Text variant="h3">Liste des ouvrages</Text>
-      {book ? (
-        <Link href={{ pathname: "/books/[id]", params: { id: book.id } }}>
-          <Text>Voir « {book.titre} »</Text>
-        </Link>
-      ) : (
-        <Text variant="muted">Chargement du fonds…</Text>
-      )}
-    </View>
-  )
-}
-
-export default BooksListRoute
+export default BooksScreen
