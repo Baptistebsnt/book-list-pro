@@ -58,17 +58,13 @@ const send = async <T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<AxiosResponse<T>> => {
-  const { body, method, headers, params, timeout, signal } = options
+  const { body } = options
 
   try {
     return await http.request<T>({
       url: path,
       data: body,
-      method,
-      headers,
-      params,
-      timeout,
-      signal,
+      ...options,
     })
   } catch (error) {
     throw formatError(error)
