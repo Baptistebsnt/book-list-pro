@@ -2,6 +2,7 @@ import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
 import { cn } from "@/lib/utils"
+import { FavoriteToggle } from "./favorite-toggle"
 import { ReadBadge } from "./read-badge"
 import { ReadToggle } from "./read-toggle"
 
@@ -30,7 +31,8 @@ export const BookListItem = ({ book, onPress }: BookListItemProps) => (
       </View>
       <ReadBadge lu={book.lu} />
     </Pressable>
-    <View className="pr-4">
+    <View className="flex-row items-center gap-1 pr-3">
+      <FavoriteToggle book={book} />
       <ReadToggle book={book} />
     </View>
   </View>
