@@ -10,7 +10,7 @@ export const noteSchema = z.object({
 export type Note = z.infer<typeof noteSchema>
 
 export const noteDraftSchema = z.object({
-  contenu: z.string().trim().min(1, "Le contenu de la note est requis"),
+  contenu: z.string().trim().min(1, "validation.note.contentRequired"),
 })
 
 export type NoteDraft = z.infer<typeof noteDraftSchema>

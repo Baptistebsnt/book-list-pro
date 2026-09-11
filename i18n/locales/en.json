@@ -29,6 +29,21 @@
     "defaultTitle": "This data cannot be displayed",
     "defaultDescription": "The server did not respond. Check the shop's connection, then try again."
   },
+  "validation": {
+    "book": {
+      "titleRequired": "Title is required",
+      "authorRequired": "Author is required",
+      "publisherRequired": "Publisher is required",
+      "yearRequired": "Year is required",
+      "yearNumber": "Year must be a number",
+      "yearInteger": "Year must be a whole number",
+      "yearMin": "Year must be after {{min}}",
+      "yearMax": "Year cannot be that far in the future"
+    },
+    "note": {
+      "contentRequired": "Note content is required"
+    }
+  },
   "books": {
     "coverAlt": "Cover of “{{title}}”",
     "updateError": "Could not update “{{title}}”. Try again later.",

@@ -1,10 +1,12 @@
 import { type Control, Controller } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Text } from "@/components/ui/text"
 import { type BookDraft } from "@/domain/book"
+import { translateFieldError } from "@/lib/validation"
 
 type BaseProps = {
   control: Control<BookDraft>
@@ -21,44 +23,58 @@ export const BookTextField = ({
   name,
   label,
   placeholder,
-}: TextFieldProps) => (
-  <Controller
-    control={control}
-    name={name}
-    render={({ field, fieldState }) => (
-      <Field label={label} error={fieldState.error?.message}>
-        <Input
-          value={field.value}
-          onChangeText={field.onChange}
-          onBlur={field.onBlur}
-          placeholder={placeholder}
-          hasError={Boolean(fieldState.error)}
-        />
-      </Field>
-    )}
-  />
-)
+}: TextFieldProps) => {
+  const { t } = useTranslation()
 
-export const BookYearField = ({ control, label, placeholder }: BaseProps) => (
-  <Controller
-    control={control}
-    name="annee"
-    render={({ field, fieldState }) => (
-      <Field label={label} error={fieldState.error?.message}>
-        <Input
-          value={Number.isNaN(field.value) ? "" : String(field.value)}
-          onChangeText={(text) =>
-            field.onChange(text === "" ? NaN : Number(text))
-          }
-          onBlur={field.onBlur}
-          keyboardType="number-pad"
-          placeholder={placeholder}
-          hasError={Boolean(fieldState.error)}
-        />
-      </Field>
-    )}
-  />
-)
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <Field
+          label={label}
+          error={translateFieldError(t, fieldState.error?.message)}
+        >
+          <Input
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
+            placeholder={placeholder}
+            hasError={Boolean(fieldState.error)}
+          />
+        </Field>
+      )}
+    />
+  )
+}
+
+export const BookYearField = ({ control, label, placeholder }: BaseProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <Controller
+      control={control}
+      name="annee"
+      render={({ field, fieldState }) => (
+        <Field
+          label={label}
+          error={translateFieldError(t, fieldState.error?.message)}
+        >
+          <Input
+            value={Number.isNaN(field.value) ? "" : String(field.value)}
+            onChangeText={(text) =>
+              field.onChange(text === "" ? NaN : Number(text))
+            }
+            onBlur={field.onBlur}
+            keyboardType="number-pad"
+            placeholder={placeholder}
+            hasError={Boolean(fieldState.error)}
+          />
+        </Field>
+      )}
+    />
+  )
+}
 
 type SwitchFieldProps = {
   control: Control<BookDraft>

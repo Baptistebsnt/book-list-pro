@@ -7,15 +7,12 @@ export const MAX_RATING = 5
 const bookYearSchema = z
   .number({
     // eslint-disable-next-line camelcase
-    invalid_type_error: "L'annee est requise",
+    invalid_type_error: "validation.book.yearRequired",
   })
-  .finite("L'annee doit etre un nombre")
-  .int("L'annee doit etre un nombre entier")
-  .min(MIN_YEAR, `L'annee doit etre posterieure a ${MIN_YEAR}`)
-  .max(
-    new Date().getFullYear() + 1,
-    "L'annee ne peut pas etre aussi loin dans le futur",
-  )
+  .finite("validation.book.yearNumber")
+  .int("validation.book.yearInteger")
+  .min(MIN_YEAR, "validation.book.yearMin")
+  .max(new Date().getFullYear() + 1, "validation.book.yearMax")
 
 export const bookSchema = z.object({
   id: z.string().min(1),
@@ -35,9 +32,9 @@ export const bookSchema = z.object({
 export type Book = z.infer<typeof bookSchema>
 
 export const bookDraftSchema = z.object({
-  titre: z.string().trim().min(1, "Le titre est requis"),
-  auteur: z.string().trim().min(1, "L'auteur est requis"),
-  editeur: z.string().trim().min(1, "L'editeur est requis"),
+  titre: z.string().trim().min(1, "validation.book.titleRequired"),
+  auteur: z.string().trim().min(1, "validation.book.authorRequired"),
+  editeur: z.string().trim().min(1, "validation.book.publisherRequired"),
   annee: bookYearSchema,
   lu: z.boolean(),
   favori: z.boolean(),
