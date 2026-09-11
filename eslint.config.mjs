@@ -11,6 +11,7 @@ export default defineConfig([
   expoConfig,
   {
     ignores: [
+      "api",
       "dist",
       ".expo",
       "expo-env.d.ts",

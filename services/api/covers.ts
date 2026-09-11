@@ -1,3 +1,5 @@
+import { type CoverImage } from "@/services/media/cover-image"
+import { apiClient } from "./client"
 import { config } from "./config"
 
 const fallbackPath = (bookId: string): string =>
@@ -24,4 +26,18 @@ export const resolveCoverUrl = (
     (value.length > 0 ? toDisplayableUrl(value) : null) ??
     new URL(fallbackPath(bookId), config.baseUrl).toString()
   )
+}
+
+export const uploadCover = async (
+  bookId: string,
+  image: CoverImage,
+): Promise<void> => {
+  await apiClient.post(`/books/${bookId}/cover`, {
+    data: image.dataUrl,
+    mimeType: image.mimeType,
+  })
+}
+
+export const restoreCover = async (bookId: string): Promise<void> => {
+  await apiClient.delete(`/books/${bookId}/cover`)
 }

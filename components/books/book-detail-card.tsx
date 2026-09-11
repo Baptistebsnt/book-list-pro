@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { BookCover } from "@/components/books/book-cover"
+import { CoverActions } from "@/components/books/cover-actions"
 import { FavoriteToggle } from "@/components/books/favorite-toggle"
 import { NoteRating } from "@/components/books/note-rating"
 import { ReadToggle } from "@/components/books/read-toggle"
@@ -60,6 +61,7 @@ export const BookDetailCard = ({ book }: { book: Book }) => {
         label={t("books.coverAlt", { title: book.titre })}
         className="h-56 w-40 self-center"
       />
+      <CoverActions book={book} />
       <View className="gap-3">
         <View className="flex-row items-start justify-between gap-3">
           <Text variant="h3" className="flex-1">

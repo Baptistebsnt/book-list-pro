@@ -6,6 +6,8 @@ import {
   ConflictError,
   NetworkError,
   NotFoundError,
+  PayloadTooLargeError,
+  UnsupportedMediaError,
   ValidationError,
 } from "./errors"
 
@@ -68,6 +70,14 @@ export const mapError = (status: number, rawBody: unknown): AppError => {
       fields: data.fields ?? {},
       message: data.message,
     })
+  }
+
+  if (status === HTTP_STATUS.PAYLOAD_TOO_LARGE) {
+    return new PayloadTooLargeError({ message: data.message })
+  }
+
+  if (status === HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE) {
+    return new UnsupportedMediaError({ message: data.message })
   }
 
   if (status === HTTP_STATUS.SERVICE_UNAVAILABLE) {
