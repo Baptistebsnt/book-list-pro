@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type UseFormSetError, useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import {
   BookSwitchField,
@@ -33,6 +34,7 @@ export const BookForm = ({
   onSubmit,
   onCancel,
 }: BookFormProps) => {
+  const { t } = useTranslation()
   const { control, handleSubmit, setError, formState } = useForm<BookDraft>({
     resolver: zodResolver(bookDraftSchema),
     defaultValues,
@@ -51,7 +53,7 @@ export const BookForm = ({
 
       setError("root", {
         message:
-          error instanceof Error ? error.message : "Une erreur est survenue.",
+          error instanceof Error ? error.message : t("common.genericError"),
       })
     }
   })
@@ -61,27 +63,31 @@ export const BookForm = ({
       <BookTextField
         control={control}
         name="titre"
-        label="Titre"
-        placeholder="Titre de l'ouvrage"
+        label={t("books.field.title")}
+        placeholder={t("books.form.titlePlaceholder")}
       />
       <BookTextField
         control={control}
         name="auteur"
-        label="Auteur"
-        placeholder="Nom de l'auteur"
+        label={t("books.field.author")}
+        placeholder={t("books.form.authorPlaceholder")}
       />
       <BookTextField
         control={control}
         name="editeur"
-        label="Éditeur"
-        placeholder="Nom de l'éditeur"
+        label={t("books.field.publisher")}
+        placeholder={t("books.form.publisherPlaceholder")}
       />
       <BookYearField
         control={control}
-        label="Année"
-        placeholder="Année de publication"
+        label={t("books.field.year")}
+        placeholder={t("books.form.yearPlaceholder")}
       />
-      <BookSwitchField control={control} name="lu" label="Lu" />
+      <BookSwitchField
+        control={control}
+        name="lu"
+        label={t("books.status.read")}
+      />
 
       {errors.root ? (
         <Text className="text-sm text-destructive">{errors.root.message}</Text>
@@ -89,10 +95,10 @@ export const BookForm = ({
 
       <View className="gap-3">
         <Button onPress={submit} disabled={isSubmitting}>
-          <Text>{isSubmitting ? "Enregistrement…" : submitLabel}</Text>
+          <Text>{isSubmitting ? t("books.form.submitting") : submitLabel}</Text>
         </Button>
         <Button variant="outline" onPress={onCancel} disabled={isSubmitting}>
-          <Text>Annuler</Text>
+          <Text>{t("common.cancel")}</Text>
         </Button>
       </View>
     </View>

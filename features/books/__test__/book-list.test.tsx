@@ -14,6 +14,7 @@ import {
 } from "vitest"
 import { BookListItem } from "@/components/books/book-list-item"
 import { DeferredDeletionProvider } from "@/providers/deferred-deletion"
+import { AppLanguageProvider } from "@/providers/language"
 import { AppThemeProvider } from "@/providers/theme"
 import { SEARCH_DEBOUNCE_MS } from "@/services/query/books"
 import { makeBook, makeBookPage } from "@/test/factories"
@@ -69,9 +70,11 @@ const renderList = () => {
 
   const Providers = ({ children }: { children: ReactNode }) => (
     <Wrapper>
-      <AppThemeProvider>
-        <DeferredDeletionProvider>{children}</DeferredDeletionProvider>
-      </AppThemeProvider>
+      <AppLanguageProvider>
+        <AppThemeProvider>
+          <DeferredDeletionProvider>{children}</DeferredDeletionProvider>
+        </AppThemeProvider>
+      </AppLanguageProvider>
     </Wrapper>
   )
 

@@ -1,5 +1,6 @@
 import { Star } from "lucide-react-native"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book, MAX_RATING } from "@/domain/book"
@@ -17,16 +18,19 @@ const HIT_SLOP = 6
 
 const STARS = Array.from({ length: MAX_RATING }, (_, index) => index + 1)
 
-const starLabel = (book: Book, star: number): string =>
-  `Noter « ${book.titre} » ${star} sur ${MAX_RATING}`
-
-const valueLabel = (note: number | null): string =>
-  note === null ? "Non notée" : `${note} / ${MAX_RATING}`
-
 export const NoteRating = ({ book }: NoteRatingProps) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const [hasFailed, setHasFailed] = useState(false)
   const { mutate, isPending } = useSetNote()
+
+  const starLabel = (star: number): string =>
+    t("books.rating.set", { title: book.titre, star, max: MAX_RATING })
+
+  const valueLabel = (note: number | null): string =>
+    note === null
+      ? t("books.rating.unrated")
+      : t("books.rating.value", { note, max: MAX_RATING })
 
   const setNote = (note: number | null) => {
     setHasFailed(false)
@@ -42,7 +46,7 @@ export const NoteRating = ({ book }: NoteRatingProps) => {
     <View className="gap-1">
       <View
         role="radiogroup"
-        aria-label={`Note de « ${book.titre} »`}
+        aria-label={t("books.rating.groupLabel", { title: book.titre })}
         className="flex-row items-center gap-1"
       >
         {STARS.map((star) => {
@@ -56,7 +60,7 @@ export const NoteRating = ({ book }: NoteRatingProps) => {
               hitSlop={HIT_SLOP}
               role="radio"
               aria-checked={book.note === star}
-              aria-label={starLabel(book, star)}
+              aria-label={starLabel(star)}
               aria-busy={isPending}
               className={cn(
                 "h-11 w-11 items-center justify-center rounded-full active:bg-muted",
@@ -78,7 +82,7 @@ export const NoteRating = ({ book }: NoteRatingProps) => {
             disabled={isPending}
             hitSlop={HIT_SLOP}
             role="button"
-            aria-label={`Effacer la note de « ${book.titre} »`}
+            aria-label={t("books.rating.clearLabel", { title: book.titre })}
             aria-busy={isPending}
             className={cn(
               "ml-1 h-11 items-center justify-center rounded-full px-3 active:bg-muted",
@@ -87,7 +91,7 @@ export const NoteRating = ({ book }: NoteRatingProps) => {
             )}
           >
             <Text variant="small" className="text-muted-foreground">
-              Effacer
+              {t("common.clear")}
             </Text>
           </Pressable>
         )}
@@ -97,9 +101,9 @@ export const NoteRating = ({ book }: NoteRatingProps) => {
           variant="small"
           className="text-xs text-destructive"
           aria-live="polite"
-          aria-label={`Échec de l'enregistrement de la note pour « ${book.titre} »`}
+          aria-label={t("books.rating.saveError", { title: book.titre })}
         >
-          Échec
+          {t("common.failure")}
         </Text>
       ) : (
         <Text variant="small" className="text-muted-foreground">

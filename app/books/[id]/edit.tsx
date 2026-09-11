@@ -1,10 +1,10 @@
 import { Stack, useLocalSearchParams } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { BookEdit } from "@/features/books/book-edit"
 import { useBook } from "@/services/query/books"
 
-const FALLBACK_TITLE = "Modifier l'ouvrage"
-
 const EditBookRoute = () => {
+  const { t } = useTranslation()
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data } = useBook(id)
 
@@ -12,7 +12,9 @@ const EditBookRoute = () => {
     <>
       <Stack.Screen
         options={{
-          title: data ? `Modifier « ${data.titre} »` : FALLBACK_TITLE,
+          title: data
+            ? t("books.edit.title", { title: data.titre })
+            : t("books.edit.fallbackTitle"),
         }}
       />
       <BookEdit id={id} />

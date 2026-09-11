@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,28 +21,32 @@ type DeleteNoteDialogProps = {
 export const DeleteNoteDialog = ({
   disabled = false,
   onConfirm,
-}: DeleteNoteDialogProps) => (
-  <AlertDialog>
-    <AlertDialogTrigger asChild>
-      <Button variant="destructive" size="sm" disabled={disabled}>
-        <Text>Supprimer</Text>
-      </Button>
-    </AlertDialogTrigger>
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Supprimer cette note ?</AlertDialogTitle>
-        <AlertDialogDescription>
-          Cette action retire définitivement la note de lecture.
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>
-          <Text>Conserver</Text>
-        </AlertDialogCancel>
-        <AlertDialogAction className="bg-destructive" onPress={onConfirm}>
-          <Text>Supprimer</Text>
-        </AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
-)
+}: DeleteNoteDialogProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" size="sm" disabled={disabled}>
+          <Text>{t("notes.delete.button")}</Text>
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t("notes.delete.title")}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {t("notes.delete.description")}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Text>{t("common.keep")}</Text>
+          </AlertDialogCancel>
+          <AlertDialogAction className="bg-destructive" onPress={onConfirm}>
+            <Text>{t("common.delete")}</Text>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}

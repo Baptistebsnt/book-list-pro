@@ -1,4 +1,5 @@
 import { Link, useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { DeleteBookDialog } from "@/components/books/delete-book-dialog"
 import { Button } from "@/components/ui/button"
@@ -11,6 +12,7 @@ type BookDetailActionsProps = {
 }
 
 export const BookDetailActions = ({ book }: BookDetailActionsProps) => {
+  const { t } = useTranslation()
   const router = useRouter()
   const { requestDeletion } = useDeferredDeletion()
 
@@ -33,7 +35,7 @@ export const BookDetailActions = ({ book }: BookDetailActionsProps) => {
         asChild
       >
         <Button>
-          <Text>Modifier la fiche</Text>
+          <Text>{t("books.detail.edit")}</Text>
         </Button>
       </Link>
       <DeleteBookDialog titre={book.titre} onConfirm={confirmDeletion} />

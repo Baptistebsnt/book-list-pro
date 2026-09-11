@@ -1,4 +1,5 @@
 import { NotebookPen } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { ReadingNoteForm } from "@/components/books/reading-note-form"
 import { ReadingNoteItem } from "@/components/books/reading-note-item"
@@ -23,13 +24,14 @@ const ReadingNotesSkeleton = () => (
 )
 
 export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
+  const { t } = useTranslation()
   const query = useNotes(bookId)
   const createNote = useCreateNote()
   const deleteNote = useDeleteNote()
 
   const submitNote = async (draft: NoteDraft) => {
     await createNote.mutateAsync({ bookId, draft })
-    toast.show(`Note ajoutée à « ${bookTitle} ».`, { type: "success" })
+    toast.show(t("notes.addSuccess", { title: bookTitle }), { type: "success" })
   }
 
   const removeNote = (noteId: string): void => {
@@ -37,13 +39,12 @@ export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
       { bookId, noteId },
       {
         onSuccess: () => {
-          toast.show("Note supprimée.", { type: "success" })
+          toast.show(t("notes.deleteSuccess"), { type: "success" })
         },
         onError: () => {
-          toast.show(
-            `Impossible de supprimer cette note de « ${bookTitle} ». Réessayez plus tard.`,
-            { type: "error" },
-          )
+          toast.show(t("notes.deleteError", { title: bookTitle }), {
+            type: "error",
+          })
         },
       },
     )
@@ -56,8 +57,8 @@ export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
   if (query.isError) {
     return (
       <ErrorState
-        title="Impossible d'afficher les notes"
-        description={`Les notes de lecture de « ${bookTitle} » n'ont pas pu être chargées. Vérifiez la connexion de la boutique, puis réessayez.`}
+        title={t("notes.loadErrorTitle")}
+        description={t("notes.loadErrorDescription", { title: bookTitle })}
         onRetry={() => void query.refetch()}
         isRetrying={query.isFetching}
       />
@@ -68,10 +69,10 @@ export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
 
   return (
     <View className="gap-4 rounded-lg border border-border bg-card p-4">
-      <Text variant="h4">Notes de lecture</Text>
+      <Text variant="h4">{t("notes.title")}</Text>
 
       {notes.length > 0 ? (
-        <View className="gap-3" role="list" aria-label="Notes de lecture">
+        <View className="gap-3" role="list" aria-label={t("notes.listLabel")}>
           {notes.map((note) => (
             <ReadingNoteItem
               disabled={deleteNote.isPending}
@@ -84,8 +85,8 @@ export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
       ) : (
         <EmptyState
           icon={NotebookPen}
-          title="Aucune note de lecture"
-          description={`Personne n'a encore noté de remarque sur « ${bookTitle} ». Votre première note apparaîtra ici.`}
+          title={t("notes.emptyTitle")}
+          description={t("notes.emptyDescription", { title: bookTitle })}
         />
       )}
 

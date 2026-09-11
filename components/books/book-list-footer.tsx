@@ -1,4 +1,5 @@
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { BookListSkeletonRow } from "@/components/books/book-list-skeleton"
 import { Text } from "@/components/ui/text"
@@ -11,6 +12,8 @@ type BookListFooterProps = {
 
 export const BookListFooter = memo(
   ({ isFetchingNextPage, hasNextPage, count }: BookListFooterProps) => {
+    const { t } = useTranslation()
+
     if (isFetchingNextPage) {
       return <BookListSkeletonRow />
     }
@@ -19,7 +22,7 @@ export const BookListFooter = memo(
       return (
         <View className="py-4">
           <Text variant="muted" className="text-center">
-            Fin du fonds
+            {t("books.list.end")}
           </Text>
         </View>
       )

@@ -1,9 +1,11 @@
 import { Tabs } from "expo-router"
 import { Home, Plus } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
 import { HapticTab } from "@/components/haptic-tab"
 import { useTheme } from "@/hooks/use-theme"
 
 const TabLayout = () => {
+  const { t } = useTranslation()
   const theme = useTheme()
 
   return (
@@ -22,14 +24,14 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Accueil",
+          title: t("tabs.home"),
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="new"
         options={{
-          title: "Ajouter",
+          title: t("tabs.add"),
           tabBarIcon: ({ color, size }) => <Plus color={color} size={size} />,
         }}
       />
