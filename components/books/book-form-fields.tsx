@@ -73,7 +73,11 @@ export const BookSwitchField = ({ control, name, label }: SwitchFieldProps) => (
     render={({ field }) => (
       <View className="flex-row items-center justify-between">
         <Text variant="small">{label}</Text>
-        <Switch checked={field.value} onCheckedChange={field.onChange} />
+        <Switch
+          checked={field.value}
+          onCheckedChange={field.onChange}
+          aria-label={label}
+        />
       </View>
     )}
   />

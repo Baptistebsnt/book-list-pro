@@ -17,7 +17,11 @@ export const BookSearchBar = memo(() => {
   return (
     <View className="flex-row items-center gap-2 px-4 pb-3">
       <View className="flex-1 flex-row items-center">
-        <View className="absolute left-3 z-10">
+        <View
+          className="absolute left-3 z-10"
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
           <Search size={ICON_SIZE} color={theme.mutedForeground} />
         </View>
         <Input

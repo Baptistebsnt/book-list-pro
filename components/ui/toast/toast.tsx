@@ -208,6 +208,8 @@ export const Toast = ({ toast, index }: ToastProps) => {
 
   return (
     <Animated.View
+      role="alert"
+      aria-live="assertive"
       style={[
         styles.toastContainer,
         animatedStyle,

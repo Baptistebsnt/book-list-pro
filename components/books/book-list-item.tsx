@@ -12,11 +12,20 @@ type BookListItemProps = {
   onPress: (book: Book) => void
 }
 
+const openLabel = (book: Book): string =>
+  `Ouvrir « ${book.titre} », ${book.auteur}, ${book.annee}, ${
+    book.lu ? "lu" : "non lu"
+  }`
+
 export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
-  <View className="flex-row items-center border-b border-border bg-background">
+  <View
+    role="listitem"
+    className="flex-row items-center border-b border-border bg-background"
+  >
     <Pressable
       onPress={() => onPress(book)}
       role="button"
+      aria-label={openLabel(book)}
       className={cn(
         "flex-1 flex-row items-center gap-3 py-3 pl-4 pr-3 active:bg-muted",
         Platform.select({ web: "hover:bg-muted" }),
