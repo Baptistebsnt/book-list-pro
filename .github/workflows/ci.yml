@@ -49,4 +49,4 @@ jobs:
         uses: ./.github/setup
 
       - name: Test
-        run: npm test
+        run: npm run test:coverage
