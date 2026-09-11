@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { NotebookPen } from "lucide-react-native"
 import { View } from "react-native"
 import { ReadingNoteForm } from "@/components/books/reading-note-form"
 import { ReadingNoteItem } from "@/components/books/reading-note-item"
@@ -6,11 +6,13 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { ErrorState } from "@/components/ui/error-state"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Text } from "@/components/ui/text"
+import { toast } from "@/components/ui/toast"
 import { type NoteDraft, sortNotesByNewest } from "@/domain/note"
 import { useCreateNote, useDeleteNote, useNotes } from "@/services/query/notes"
 
 type ReadingNotesProps = {
   bookId: string
+  bookTitle: string
 }
 
 const ReadingNotesSkeleton = () => (
@@ -20,20 +22,31 @@ const ReadingNotesSkeleton = () => (
   </View>
 )
 
-export const ReadingNotes = ({ bookId }: ReadingNotesProps) => {
-  const [showSuccess, setShowSuccess] = useState(false)
+export const ReadingNotes = ({ bookId, bookTitle }: ReadingNotesProps) => {
   const query = useNotes(bookId)
   const createNote = useCreateNote()
   const deleteNote = useDeleteNote()
 
   const submitNote = async (draft: NoteDraft) => {
-    setShowSuccess(false)
     await createNote.mutateAsync({ bookId, draft })
-    setShowSuccess(true)
+    toast.show(`Note ajoutée à « ${bookTitle} ».`, { type: "success" })
   }
 
   const removeNote = (noteId: string): void => {
-    deleteNote.mutate({ bookId, noteId })
+    deleteNote.mutate(
+      { bookId, noteId },
+      {
+        onSuccess: () => {
+          toast.show("Note supprimée.", { type: "success" })
+        },
+        onError: () => {
+          toast.show(
+            `Impossible de supprimer cette note de « ${bookTitle} ». Réessayez plus tard.`,
+            { type: "error" },
+          )
+        },
+      },
+    )
   }
 
   if (query.isPending) {
@@ -44,6 +57,7 @@ export const ReadingNotes = ({ bookId }: ReadingNotesProps) => {
     return (
       <ErrorState
         title="Impossible d'afficher les notes"
+        description={`Les notes de lecture de « ${bookTitle} » n'ont pas pu être chargées. Vérifiez la connexion de la boutique, puis réessayez.`}
         onRetry={() => void query.refetch()}
         isRetrying={query.isFetching}
       />
@@ -51,24 +65,12 @@ export const ReadingNotes = ({ bookId }: ReadingNotesProps) => {
   }
 
   const notes = sortNotesByNewest(query.data)
-  const hasNotes = notes.length > 0
 
   return (
     <View className="gap-4 rounded-lg border border-border bg-card p-4">
-      <View className="gap-1">
-        <Text variant="h4">Notes de lecture</Text>
-        {showSuccess ? (
-          <Text
-            role="alert"
-            aria-live="polite"
-            className="text-sm text-primary"
-          >
-            Note ajoutée.
-          </Text>
-        ) : null}
-      </View>
+      <Text variant="h4">Notes de lecture</Text>
 
-      {hasNotes ? (
+      {notes.length > 0 ? (
         <View className="gap-3" role="list" aria-label="Notes de lecture">
           {notes.map((note) => (
             <ReadingNoteItem
@@ -81,8 +83,9 @@ export const ReadingNotes = ({ bookId }: ReadingNotesProps) => {
         </View>
       ) : (
         <EmptyState
-          title="Aucune note"
-          description="Aucune note de lecture n'a encore été ajoutée."
+          icon={NotebookPen}
+          title="Aucune note de lecture"
+          description={`Personne n'a encore noté de remarque sur « ${bookTitle} ». Votre première note apparaîtra ici.`}
         />
       )}
 

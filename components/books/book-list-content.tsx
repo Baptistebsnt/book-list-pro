@@ -1,5 +1,5 @@
 import { router } from "expo-router"
-import { SearchX } from "lucide-react-native"
+import { BookPlus, SearchX } from "lucide-react-native"
 import { useCallback, useEffect, useRef } from "react"
 import { FlatList, type ListRenderItem, View } from "react-native"
 import { BookListFooter } from "@/components/books/book-list-footer"
@@ -25,6 +25,8 @@ type BookListContentProps = {
 
 const openBook = (book: Book) =>
   router.push({ pathname: "/books/[id]", params: { id: book.id } })
+
+const openNewBook = () => router.push("/new")
 
 const keyExtractor = (book: Book): string => book.id
 
@@ -89,9 +91,14 @@ export const BookListContent = ({
           </EmptyState>
         ) : (
           <EmptyState
-            title="Aucun ouvrage"
-            description="Le fonds est vide pour le moment. Ajoutez un premier ouvrage pour démarrer le catalogue."
-          />
+            icon={BookPlus}
+            title="Le fonds est vide"
+            description="Aucun ouvrage n'a encore été catalogué. Ajoutez le premier pour démarrer le fonds de la boutique."
+          >
+            <Button onPress={openNewBook}>
+              <Text>Ajouter un ouvrage</Text>
+            </Button>
+          </EmptyState>
         )}
       </Centered>
     )

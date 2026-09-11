@@ -301,6 +301,28 @@ export default defineConfig([
     },
   },
   {
+    // Les couleurs vivent dans lib/theme.ts et global.css : l'interface les lit
+    // via useTheme() ou les classes Tailwind du thème.
+    files: [
+      "app/**/*.{ts,tsx}",
+      "components/**/*.{ts,tsx}",
+      "features/**/*.{ts,tsx}",
+      "hooks/**/*.{ts,tsx}",
+      "providers/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "Literal[value=/(#[0-9a-fA-F]{3}\\b|#[0-9a-fA-F]{6}\\b|\\b(rgb|rgba|hsl|hsla)\\()/]",
+          message:
+            "Couleur en dur interdite : utilisez un token de lib/theme.ts (useTheme) ou une classe Tailwind du thème.",
+        },
+      ],
+    },
+  },
+  {
     files: ["services/api/errors.ts"],
     rules: {
       "max-classes-per-file": "off",

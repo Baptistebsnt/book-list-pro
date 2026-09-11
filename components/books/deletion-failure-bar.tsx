@@ -14,7 +14,7 @@ export const DeletionFailureBar = ({
   <View
     role="alert"
     aria-live="assertive"
-    className="flex-row items-center gap-3 rounded-lg border border-destructive bg-card p-3 shadow-lg shadow-black/10"
+    className="flex-row items-center gap-3 rounded-lg border border-destructive bg-card p-3 shadow-lg shadow-overlay/10"
   >
     <View className="flex-1 gap-0.5">
       <Text numberOfLines={1}>Échec de la suppression</Text>

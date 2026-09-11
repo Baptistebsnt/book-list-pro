@@ -94,6 +94,34 @@ describe("BooksList", () => {
     expect(screen.getByText("Solaris")).toBe(row)
   })
 
+  it("invites the user to catalogue a first book when the fonds is empty", async () => {
+    server.use(
+      http.get(BOOKS_URL, () =>
+        HttpResponse.json(makeBookPage({ items: [], total: 0 })),
+      ),
+    )
+    renderList()
+
+    expect(await screen.findByText("Le fonds est vide")).toBeInTheDocument()
+    expect(screen.getByText("Ajouter un ouvrage")).toBeInTheDocument()
+  })
+
+  it("names the searched term when nothing matches", async () => {
+    renderList()
+    await screen.findByText("Solaris")
+
+    await userEvent.type(screen.getByLabelText(LABEL), "zzz")
+
+    await waitFor(
+      () =>
+        expect(
+          screen.getByText("Aucun résultat pour « zzz »"),
+        ).toBeInTheDocument(),
+      { timeout: SEARCH_DEBOUNCE_MS * 4 },
+    )
+    expect(screen.getByText("Réinitialiser")).toBeInTheDocument()
+  })
+
   it("renders the results once the debounced search lands", async () => {
     renderList()
     await screen.findByText("Solaris")

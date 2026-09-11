@@ -17,6 +17,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated"
+import { useTheme } from "@/hooks/use-theme"
 import { useToast } from "./toast-context"
 import type { Toast as ToastType, ToastType as ToastVariant } from "./types"
 
@@ -33,22 +34,27 @@ type ToastProps = {
 
 const EASE = Easing.bezier(0.25, 0.46, 0.45, 0.94)
 
-const getBackgroundColor = (type: ToastVariant) => {
+type ToastTheme = ReturnType<typeof useTheme>
+
+const getColors = (type: ToastVariant, theme: ToastTheme) => {
   switch (type) {
     case "success":
-      return "#10B981"
+      return { background: theme.success, foreground: theme.successForeground }
 
     case "error":
-      return "#EF4444"
+      return {
+        background: theme.destructive,
+        foreground: theme.destructiveForeground,
+      }
 
     case "warning":
-      return "#F59E0B"
+      return { background: theme.warning, foreground: theme.warningForeground }
 
     case "info":
-      return "#3B82F6"
+      return { background: theme.info, foreground: theme.infoForeground }
 
     default:
-      return "#262626"
+      return { background: theme.primary, foreground: theme.primaryForeground }
   }
 }
 
@@ -72,6 +78,7 @@ const getIconForType = (type: ToastVariant) => {
 }
 
 export const Toast = ({ toast, index }: ToastProps) => {
+  const theme = useTheme()
   const { dismiss } = useToast()
   const prevIndexRef = useRef<number>(-1)
   const opacity = useSharedValue(0)
@@ -203,7 +210,7 @@ export const Toast = ({ toast, index }: ToastProps) => {
     setTimeout(handleDismiss, 250)
   }
 
-  const backgroundColor = getBackgroundColor(toast.options.type)
+  const { background, foreground } = getColors(toast.options.type, theme)
   const icon = getIconForType(toast.options.type)
 
   return (
@@ -214,6 +221,7 @@ export const Toast = ({ toast, index }: ToastProps) => {
         styles.toastContainer,
         animatedStyle,
         {
+          shadowColor: theme.overlay,
           position: "absolute",
           top: isTop ? 100 : undefined,
           bottom: isTop ? undefined : 0,
@@ -221,27 +229,33 @@ export const Toast = ({ toast, index }: ToastProps) => {
       ]}
     >
       <Pressable
-        style={[styles.toast, { backgroundColor }]}
+        style={[styles.toast, { backgroundColor: background }]}
         onPress={handlePress}
-        android_ripple={{ color: "rgba(255, 255, 255, 0.1)" }}
+        android_ripple={{ color: background }}
       >
-        {icon ? <Text style={styles.icon}>{icon}</Text> : null}
+        {icon ? (
+          <Text style={[styles.icon, { color: foreground }]}>{icon}</Text>
+        ) : null}
         <View style={styles.contentContainer}>
           {typeof toast.content === "string" ? (
-            <Text style={styles.text}>{toast.content}</Text>
+            <Text style={[styles.text, { color: foreground }]}>
+              {toast.content}
+            </Text>
           ) : (
             toast.content
           )}
         </View>
         {toast.options.action ? (
           <TouchableOpacity
-            style={styles.actionButton}
+            style={[styles.actionButton, { borderColor: foreground }]}
             onPress={() => {
               toast.options.action?.onPress()
               handlePress()
             }}
           >
-            <Text style={styles.actionText}>{toast.options.action.label}</Text>
+            <Text style={[styles.actionText, { color: foreground }]}>
+              {toast.options.action.label}
+            </Text>
           </TouchableOpacity>
         ) : null}
       </Pressable>
@@ -257,7 +271,6 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 12,
     overflow: "hidden",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -270,7 +283,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   icon: {
-    color: "#fff",
     fontSize: 20,
     marginRight: 12,
     fontWeight: "bold",
@@ -281,7 +293,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: "#fff",
     fontSize: 16,
     fontWeight: "500",
     lineHeight: 20,
@@ -290,11 +301,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 1,
     marginLeft: 12,
   },
   actionText: {
-    color: "#fff",
     fontSize: 14,
     fontWeight: "600",
   },
