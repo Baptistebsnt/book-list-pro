@@ -1,9 +1,11 @@
 import { View } from "react-native"
+import { BookCover } from "@/components/books/book-cover"
 import { FavoriteToggle } from "@/components/books/favorite-toggle"
 import { ReadToggle } from "@/components/books/read-toggle"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
 import { cn } from "@/lib/utils"
+import { resolveCoverUrl } from "@/services/api/covers"
 
 type DetailRowProps = {
   label: string
@@ -42,6 +44,12 @@ const ReadingStatus = ({ lu }: { lu: boolean }) => (
 
 export const BookDetailCard = ({ book }: { book: Book }) => (
   <View className="gap-4 rounded-lg border border-border bg-card p-4">
+    <BookCover
+      uri={resolveCoverUrl(book.couverture, book.id)}
+      label={`Couverture de « ${book.titre} »`}
+      className="h-56 w-40 self-center"
+      iconSize={40}
+    />
     <View className="gap-3">
       <View className="flex-row items-start justify-between gap-3">
         <Text variant="h3" className="flex-1">
