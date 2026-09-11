@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { type Book } from "@/domain/book"
+import { type Book, type BookDraft } from "@/domain/book"
 import {
   createBook,
   deleteBook,
@@ -50,99 +50,78 @@ export const usePatchBook = () => {
   })
 }
 
-export type FavoriteChange = {
+type PatchInput = {
   id: string
   version: number
+}
+
+type OptimisticContext = {
+  snapshot: BookCacheSnapshot
+}
+
+const useOptimisticFieldPatch = <TInput extends PatchInput>(
+  toChanges: (input: TInput) => Partial<BookDraft>,
+) => {
+  const client = useQueryClient()
+
+  return useMutation<Book, Error, TInput, OptimisticContext>({
+    mutationFn: (input: TInput) =>
+      patchBook({
+        id: input.id,
+        version: input.version,
+        changes: toChanges(input),
+      }),
+
+    onMutate: async (input: TInput) => {
+      await client.cancelQueries({ queryKey: bookKeys.root })
+
+      return { snapshot: patchBookInCaches(client, input.id, toChanges(input)) }
+    },
+
+    onError: (
+      error: Error,
+      input: TInput,
+      context: OptimisticContext | undefined,
+    ) => {
+      if (context) {
+        restoreBookCaches(client, context.snapshot)
+      }
+    },
+
+    onSuccess: (book: Book) => {
+      patchBookInCaches(client, book.id, book)
+    },
+
+    onSettled: async (
+      book: Book | undefined,
+      error: Error | null,
+      input: TInput,
+    ) => {
+      await invalidateBooks(client, input.id)
+    },
+  })
+}
+
+export type FavoriteChange = PatchInput & {
   favori: boolean
 }
 
-type FavoriteContext = {
-  snapshot: BookCacheSnapshot
-}
+export const useToggleFavorite = () =>
+  useOptimisticFieldPatch<FavoriteChange>(({ favori }) => ({ favori }))
 
-export const useToggleFavorite = () => {
-  const client = useQueryClient()
-
-  return useMutation<Book, Error, FavoriteChange, FavoriteContext>({
-    mutationFn: ({ id, version, favori }: FavoriteChange) =>
-      patchBook({ id, version, changes: { favori } }),
-
-    onMutate: async ({ id, favori }: FavoriteChange) => {
-      await client.cancelQueries({ queryKey: bookKeys.root })
-
-      return { snapshot: patchBookInCaches(client, id, { favori }) }
-    },
-
-    onError: (
-      error: Error,
-      variables: FavoriteChange,
-      context: FavoriteContext | undefined,
-    ) => {
-      if (context) {
-        restoreBookCaches(client, context.snapshot)
-      }
-    },
-
-    onSuccess: (book: Book) => {
-      patchBookInCaches(client, book.id, book)
-    },
-
-    onSettled: async (
-      book: Book | undefined,
-      error: Error | null,
-      variables: FavoriteChange,
-    ) => {
-      await invalidateBooks(client, variables.id)
-    },
-  })
-}
-
-export type ReadStatusToggle = {
-  id: string
-  version: number
+export type ReadStatusToggle = PatchInput & {
   lu: boolean
 }
 
-type ReadStatusContext = {
-  snapshot: BookCacheSnapshot
+export const useToggleReadStatus = () =>
+  useOptimisticFieldPatch<ReadStatusToggle>(({ lu }) => ({ lu }))
+
+export type NoteChange = PatchInput & {
+  note: number | null
 }
 
-export const useToggleReadStatus = () => {
-  const client = useQueryClient()
-
-  return useMutation<Book, Error, ReadStatusToggle, ReadStatusContext>({
-    mutationFn: ({ id, version, lu }: ReadStatusToggle) =>
-      patchBook({ id, version, changes: { lu } }),
-
-    onMutate: async ({ id, lu }: ReadStatusToggle) => {
-      await client.cancelQueries({ queryKey: bookKeys.root })
-
-      return { snapshot: patchBookInCaches(client, id, { lu }) }
-    },
-
-    onError: (
-      error: Error,
-      variables: ReadStatusToggle,
-      context: ReadStatusContext | undefined,
-    ) => {
-      if (context) {
-        restoreBookCaches(client, context.snapshot)
-      }
-    },
-
-    onSuccess: (book: Book) => {
-      patchBookInCaches(client, book.id, book)
-    },
-
-    onSettled: async (
-      book: Book | undefined,
-      error: Error | null,
-      variables: ReadStatusToggle,
-    ) => {
-      await invalidateBooks(client, variables.id)
-    },
-  })
-}
+export const useSetNote = () =>
+  useOptimisticFieldPatch<NoteChange>(({ note }) => ({ note }))
 
 export const useDeleteBook = () => {
   const client = useQueryClient()

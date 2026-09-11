@@ -1,5 +1,6 @@
 import { View } from "react-native"
 import { FavoriteToggle } from "@/components/books/favorite-toggle"
+import { NoteRating } from "@/components/books/note-rating"
 import { ReadToggle } from "@/components/books/read-toggle"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
@@ -52,6 +53,12 @@ export const BookDetailCard = ({ book }: { book: Book }) => (
       <View className="flex-row items-center justify-between gap-3">
         <ReadingStatus lu={book.lu} />
         <ReadToggle book={book} />
+      </View>
+      <View className="gap-1.5">
+        <Text variant="small" className="text-muted-foreground">
+          Note interne
+        </Text>
+        <NoteRating book={book} />
       </View>
     </View>
     <View>
