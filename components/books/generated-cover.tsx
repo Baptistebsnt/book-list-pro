@@ -9,9 +9,6 @@ type GeneratedCoverProps = {
   compact?: boolean
 }
 
-// Semantic token pairs: each keeps its foreground readable on its background in
-// both light and dark themes, so the generated cover never needs a hard-coded
-// colour while still varying per book.
 const PALETTE = [
   ["destructive", "destructiveForeground"],
   ["success", "successForeground"],
