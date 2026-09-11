@@ -65,6 +65,16 @@ Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
   à tout payload qui ne respecte pas le schéma. Un `ResponseContractError`
   distingue ce cas d'un 422 : le libraire n'a rien fait de mal, c'est la réponse
   elle-même qui est inutilisable.
+- **Recherche pilotée par la clé de cache** (`useBookSearch`) : le terme saisi
+  est débattu 300 ms puis entre dans `q`, donc dans la clé — le serveur filtre,
+  jamais le client. Chaque frappe déclenche un `cancelQueries` sur les listes :
+  la requête encore en vol est abandonnée par son `signal` et n'écrit rien,
+  ce qui évite qu'une réponse lente pour « du » recouvre celle de « dune ».
+  `keepPreviousData` empêche la requête de repasser à `pending` quand la clé
+  change : le chargement d'une recherche (`isPlaceholderData`) reste ainsi
+  distinguable du chargement initial (`status === "pending"`), et l'écran le
+  montre par un squelette court de trois lignes là où le premier chargement en
+  affiche six. L'application n'utilise aucun indicateur tournant.
 - **Le `QueryClient` est créé dans `app/_layout.tsx` via `useState`**, pas au
   niveau module : l'export web statique d'Expo évaluerait sinon le même cache
   entre deux rendus.
