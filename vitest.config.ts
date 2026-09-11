@@ -13,6 +13,7 @@ export default defineConfig({
         "test/stubs/async-storage.ts",
       ),
       "expo-router": path.resolve(__dirname, "test/stubs/expo-router.ts"),
+      "expo-image": path.resolve(__dirname, "test/stubs/expo-image.tsx"),
       "react-native-safe-area-context": path.resolve(
         __dirname,
         "test/stubs/react-native-safe-area-context.tsx",

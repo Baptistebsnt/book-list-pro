@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { resolveCoverUrl } from "../covers"
+import { hasCoverSource, resolveCoverUrl } from "../covers"
 
 const BASE = "http://localhost:3000"
 
@@ -43,5 +43,17 @@ describe("resolveCoverUrl", () => {
     expect(resolveCoverUrl(null, "livre 1/2")).toBe(
       `${BASE}/covers/livre%201%2F2.svg`,
     )
+  })
+})
+
+describe("hasCoverSource", () => {
+  it("is true when the field carries a path", () => {
+    expect(hasCoverSource("/covers/dune.svg")).toBe(true)
+    expect(hasCoverSource("https://cdn.example.com/dune.jpg")).toBe(true)
+  })
+
+  it("is false for a null or blank field", () => {
+    expect(hasCoverSource(null)).toBe(false)
+    expect(hasCoverSource("   ")).toBe(false)
   })
 })

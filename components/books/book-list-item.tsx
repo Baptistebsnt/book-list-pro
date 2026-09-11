@@ -3,6 +3,8 @@ import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book, MAX_RATING } from "@/domain/book"
 import { cn } from "@/lib/utils"
+import { hasCoverSource, resolveCoverUrl } from "@/services/api/covers"
+import { BookCover } from "./book-cover"
 import { FavoriteToggle } from "./favorite-toggle"
 import { NoteStars } from "./note-stars"
 import { ReadBadge } from "./read-badge"
@@ -32,6 +34,15 @@ export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
         Platform.select({ web: "hover:bg-muted" }),
       )}
     >
+      <BookCover
+        uri={resolveCoverUrl(book.couverture, book.id)}
+        hasSource={hasCoverSource(book.couverture)}
+        seed={book.id}
+        title={book.titre}
+        author={book.auteur}
+        compact
+        className="h-14 w-10"
+      />
       <View className="flex-1 gap-0.5">
         <Text variant="large" numberOfLines={1}>
           {book.titre}
