@@ -29,6 +29,21 @@
     "defaultTitle": "Impossible d'afficher ces données",
     "defaultDescription": "Le serveur n'a pas répondu. Vérifiez la connexion de la boutique, puis réessayez."
   },
+  "validation": {
+    "book": {
+      "titleRequired": "Le titre est requis",
+      "authorRequired": "L'auteur est requis",
+      "publisherRequired": "L'éditeur est requis",
+      "yearRequired": "L'année est requise",
+      "yearNumber": "L'année doit être un nombre",
+      "yearInteger": "L'année doit être un nombre entier",
+      "yearMin": "L'année doit être postérieure à {{min}}",
+      "yearMax": "L'année ne peut pas être aussi loin dans le futur"
+    },
+    "note": {
+      "contentRequired": "Le contenu de la note est requis"
+    }
+  },
   "books": {
     "coverAlt": "Couverture de « {{title}} »",
     "updateError": "Impossible de mettre à jour « {{title}} ». Réessayez plus tard.",

@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Text } from "@/components/ui/text"
 import { type NoteDraft, noteDraftSchema } from "@/domain/note"
+import { translateFieldError } from "@/lib/validation"
 import { ValidationError } from "@/services/api/errors"
 
 type ReadingNoteFormProps = {
@@ -55,7 +56,7 @@ export const ReadingNoteForm = ({
         render={({ field, fieldState }) => (
           <Field
             label={t("notes.form.label")}
-            error={fieldState.error?.message}
+            error={translateFieldError(t, fieldState.error?.message)}
           >
             <Input
               editable={!isSubmitting}
