@@ -6,6 +6,8 @@ import {
   patchBook,
   replaceBook,
 } from "@/services/api/books"
+import { restoreCover, uploadCover } from "@/services/api/covers"
+import { type CoverImage } from "@/services/media/cover-image"
 import {
   type BookCacheSnapshot,
   patchBookInCaches,
@@ -122,6 +124,24 @@ export type NoteChange = PatchInput & {
 
 export const useSetNote = () =>
   useOptimisticFieldPatch<NoteChange>(({ note }) => ({ note }))
+
+export const useReplaceCover = (bookId: string) => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: (image: CoverImage) => uploadCover(bookId, image),
+    onSuccess: () => invalidateBooks(client, bookId),
+  })
+}
+
+export const useRestoreCover = (bookId: string) => {
+  const client = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => restoreCover(bookId),
+    onSuccess: () => invalidateBooks(client, bookId),
+  })
+}
 
 export const useDeleteBook = () => {
   const client = useQueryClient()

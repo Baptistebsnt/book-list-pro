@@ -45,3 +45,6 @@ app-example
 # generated native folders
 /ios
 /android
+
+# API fournie (api-books-v2), lancée à côté de l'app
+api/

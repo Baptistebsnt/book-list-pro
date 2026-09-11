@@ -1,7 +1,14 @@
 import { type AuthStatus, HTTP_STATUS } from "./constants"
 
 type ErrorType =
-  "network" | "notFound" | "validation" | "conflict" | "auth" | "cancelled"
+  | "network"
+  | "notFound"
+  | "validation"
+  | "conflict"
+  | "auth"
+  | "cancelled"
+  | "payloadTooLarge"
+  | "unsupportedMedia"
 
 export abstract class AppError extends Error {
   abstract readonly type: ErrorType
@@ -86,5 +93,27 @@ export class AuthError extends AppError {
     super(args.message ?? "Authentication is required.", args.status)
     this.code = args.code ?? "auth"
     this.canReauthenticate = args.code === "jeton_expire"
+  }
+}
+
+export class PayloadTooLargeError extends AppError {
+  readonly type = "payloadTooLarge"
+
+  constructor(args: { message?: string } = {}) {
+    super(
+      args.message ?? "The uploaded content is too large.",
+      HTTP_STATUS.PAYLOAD_TOO_LARGE,
+    )
+  }
+}
+
+export class UnsupportedMediaError extends AppError {
+  readonly type = "unsupportedMedia"
+
+  constructor(args: { message?: string } = {}) {
+    super(
+      args.message ?? "This media type is not supported.",
+      HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE,
+    )
   }
 }
