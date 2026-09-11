@@ -28,6 +28,7 @@ export const bookInfiniteListOptions = (filters: BookFilters = {}) => {
     queryFn: ({ pageParam, signal }) =>
       listBooks({ ...normalized, page: pageParam }, { signal }),
     initialPageParam: normalized.page,
+    placeholderData: keepPreviousData,
     getNextPageParam: (lastPage) =>
       hasNextPage(lastPage) ? lastPage.page + 1 : null,
   })

@@ -1,4 +1,5 @@
-import { ActivityIndicator, View } from "react-native"
+import { View } from "react-native"
+import { BookListSkeletonRow } from "@/components/books/book-list-skeleton"
 import { Text } from "@/components/ui/text"
 
 type BookListFooterProps = {
@@ -13,11 +14,7 @@ export const BookListFooter = ({
   count,
 }: BookListFooterProps) => {
   if (isFetchingNextPage) {
-    return (
-      <View className="py-4">
-        <ActivityIndicator />
-      </View>
-    )
+    return <BookListSkeletonRow />
   }
 
   if (!hasNextPage && count > 0) {
