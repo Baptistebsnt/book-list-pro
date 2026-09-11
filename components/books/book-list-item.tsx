@@ -3,7 +3,7 @@ import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
 import { cn } from "@/lib/utils"
-import { resolveCoverUrl } from "@/services/api/covers"
+import { hasCoverSource, resolveCoverUrl } from "@/services/api/covers"
 import { BookCover } from "./book-cover"
 import { FavoriteToggle } from "./favorite-toggle"
 import { ReadBadge } from "./read-badge"
@@ -35,8 +35,12 @@ export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
     >
       <BookCover
         uri={resolveCoverUrl(book.couverture, book.id)}
+        hasSource={hasCoverSource(book.couverture)}
+        seed={book.id}
+        title={book.titre}
+        author={book.auteur}
+        compact
         className="h-14 w-10"
-        iconSize={18}
       />
       <View className="flex-1 gap-0.5">
         <Text variant="large" numberOfLines={1}>

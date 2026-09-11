@@ -1,14 +1,17 @@
 import { Image } from "expo-image"
-import { ImageOff } from "lucide-react-native"
 import { useEffect, useState } from "react"
 import { View } from "react-native"
-import { useTheme } from "@/hooks/use-theme"
 import { cn } from "@/lib/utils"
+import { GeneratedCover } from "./generated-cover"
 
 type BookCoverProps = {
   uri: string
+  hasSource: boolean
+  seed: string
+  title: string
+  author?: string
   className?: string
-  iconSize?: number
+  compact?: boolean
   label?: string
 }
 
@@ -16,16 +19,21 @@ const TRANSITION_MS = 150
 
 export const BookCover = ({
   uri,
+  hasSource,
+  seed,
+  title,
+  author,
   className,
-  iconSize = 20,
+  compact,
   label,
 }: BookCoverProps) => {
-  const theme = useTheme()
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     setFailed(false)
   }, [uri])
+
+  const showImage = hasSource && !failed
 
   return (
     <View
@@ -37,9 +45,7 @@ export const BookCover = ({
         ? { role: "img" as const, "aria-label": label }
         : { "aria-hidden": true })}
     >
-      {failed ? (
-        <ImageOff size={iconSize} color={theme.mutedForeground} />
-      ) : (
+      {showImage ? (
         <Image
           source={uri}
           onError={() => setFailed(true)}
@@ -49,6 +55,13 @@ export const BookCover = ({
           transition={TRANSITION_MS}
           accessibilityLabel={label}
           style={{ width: "100%", height: "100%" }}
+        />
+      ) : (
+        <GeneratedCover
+          seed={seed}
+          title={title}
+          author={author}
+          compact={compact}
         />
       )}
     </View>

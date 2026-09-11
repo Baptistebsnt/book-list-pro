@@ -11,6 +11,9 @@ const toDisplayableUrl = (value: string): string | null => {
   }
 }
 
+export const hasCoverSource = (couverture: string | null): boolean =>
+  (couverture?.trim().length ?? 0) > 0
+
 export const resolveCoverUrl = (
   couverture: string | null,
   bookId: string,

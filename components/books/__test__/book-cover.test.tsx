@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react"
-import { type ReactNode, createElement } from "react"
+import { createElement } from "react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { BookCover } from "../book-cover"
 
@@ -13,45 +13,52 @@ vi.mock("expo-image", () => ({
 
     return createElement("expo-image", {
       "aria-label": props.accessibilityLabel,
+      "data-testid": "cover-image",
     })
   },
-}))
-
-vi.mock("lucide-react-native", () => ({
-  ImageOff: (props: { children?: ReactNode }) =>
-    createElement("svg", { "data-testid": "cover-fallback" }, props.children),
 }))
 
 afterEach(() => {
   lastImage.onError = null
 })
 
+const base = {
+  uri: "https://cdn.example.com/dune.jpg",
+  seed: "book-1",
+  title: "Dune",
+  author: "Frank Herbert",
+  label: "Couverture de « Dune »",
+}
+
 describe("BookCover", () => {
   it("exposes an accessible label when one is provided", () => {
-    render(
-      <BookCover
-        uri="http://localhost:3000/covers/dune.svg"
-        label="Couverture de « Dune »"
-      />,
-    )
+    render(<BookCover {...base} hasSource />)
 
     expect(
       screen.getByRole("img", { name: "Couverture de « Dune »" }),
     ).toBeInTheDocument()
   })
 
-  it("renders a visible fallback instead of a broken image when loading fails", () => {
-    render(
-      <BookCover
-        uri="http://localhost:3000/covers/dune.svg"
-        label="Couverture de « Dune »"
-      />,
-    )
+  it("shows the fetched image when the book has a cover source", () => {
+    render(<BookCover {...base} hasSource />)
 
-    expect(screen.queryByTestId("cover-fallback")).not.toBeInTheDocument()
+    expect(screen.getByTestId("cover-image")).toBeInTheDocument()
+    expect(screen.queryByText("Dune")).not.toBeInTheDocument()
+  })
+
+  it("falls back to a generated cover when the image fails to load", () => {
+    render(<BookCover {...base} hasSource />)
 
     act(() => lastImage.onError?.())
 
-    expect(screen.getByTestId("cover-fallback")).toBeInTheDocument()
+    expect(screen.queryByTestId("cover-image")).not.toBeInTheDocument()
+    expect(screen.getByText("Dune")).toBeInTheDocument()
+  })
+
+  it("renders the generated cover without any request when there is no source", () => {
+    render(<BookCover {...base} hasSource={false} />)
+
+    expect(screen.queryByTestId("cover-image")).not.toBeInTheDocument()
+    expect(screen.getByText("Dune")).toBeInTheDocument()
   })
 })
