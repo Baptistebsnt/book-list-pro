@@ -105,6 +105,8 @@ export const BookListContent = ({
       <FlatList
         ref={list}
         data={books}
+        role="list"
+        aria-label="Liste des ouvrages"
         keyExtractor={keyExtractor}
         keyboardShouldPersistTaps="handled"
         renderItem={renderItem}

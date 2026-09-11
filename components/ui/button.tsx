@@ -31,10 +31,10 @@ const buttonVariants = cva(
         link: "",
       },
       size: {
-        default: "h-10 px-4 py-2 sm:h-9",
-        sm: "h-9 gap-1.5 rounded-md px-3 sm:h-8",
-        lg: "h-11 rounded-md px-6 sm:h-10",
-        icon: "h-10 w-10 sm:h-9 sm:w-9",
+        default: "h-11 px-4 py-2",
+        sm: "min-h-11 gap-1.5 rounded-md px-3 py-2",
+        lg: "h-12 rounded-md px-6",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {

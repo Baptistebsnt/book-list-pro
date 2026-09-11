@@ -18,7 +18,9 @@ export const BookListHeader = memo(
     <View className="gap-1 px-4 pb-3 pt-2">
       <Text variant="h3">Bibliothèque</Text>
       {count !== null && total !== null && (
-        <Text variant="muted">{summary(count, total, searchedTerm)}</Text>
+        <Text variant="muted" aria-live="polite">
+          {summary(count, total, searchedTerm)}
+        </Text>
       )}
     </View>
   ),

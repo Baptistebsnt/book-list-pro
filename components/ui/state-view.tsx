@@ -25,7 +25,12 @@ export const StateView = ({
       className="items-center gap-3 rounded-lg border border-dashed border-border p-8"
       accessibilityRole="summary"
     >
-      <Icon color={theme.mutedForeground} size={ICON_SIZE} />
+      <View
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Icon color={theme.mutedForeground} size={ICON_SIZE} />
+      </View>
       <Text variant="large" className="text-center">
         {title}
       </Text>

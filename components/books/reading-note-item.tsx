@@ -22,7 +22,10 @@ export const ReadingNoteItem = ({
   note,
   onDelete,
 }: ReadingNoteItemProps) => (
-  <View className="gap-3 rounded-lg border border-border bg-card p-4">
+  <View
+    role="listitem"
+    className="gap-3 rounded-lg border border-border bg-card p-4"
+  >
     <View className="gap-1">
       <Text>{note.contenu}</Text>
       <Text variant="muted">{formatCreatedAt(note.createdAt)}</Text>

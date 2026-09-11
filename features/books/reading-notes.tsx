@@ -58,12 +58,18 @@ export const ReadingNotes = ({ bookId }: ReadingNotesProps) => {
       <View className="gap-1">
         <Text variant="h4">Notes de lecture</Text>
         {showSuccess ? (
-          <Text className="text-sm text-primary">Note ajoutée.</Text>
+          <Text
+            role="alert"
+            aria-live="polite"
+            className="text-sm text-primary"
+          >
+            Note ajoutée.
+          </Text>
         ) : null}
       </View>
 
       {hasNotes ? (
-        <View className="gap-3">
+        <View className="gap-3" role="list" aria-label="Notes de lecture">
           {notes.map((note) => (
             <ReadingNoteItem
               disabled={deleteNote.isPending}

@@ -11,7 +11,11 @@ export const DeletionFailureBar = ({
   titre,
   onDismiss,
 }: DeletionFailureBarProps) => (
-  <View className="flex-row items-center gap-3 rounded-lg border border-destructive bg-card p-3 shadow-lg shadow-black/10">
+  <View
+    role="alert"
+    aria-live="assertive"
+    className="flex-row items-center gap-3 rounded-lg border border-destructive bg-card p-3 shadow-lg shadow-black/10"
+  >
     <View className="flex-1 gap-0.5">
       <Text numberOfLines={1}>Échec de la suppression</Text>
       <Text variant="muted">« {titre} » est toujours dans le fonds.</Text>

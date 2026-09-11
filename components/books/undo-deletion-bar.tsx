@@ -17,7 +17,10 @@ export const UndoDeletionBar = ({
   const remaining = useCountdown(seconds)
 
   return (
-    <View className="flex-row items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-lg shadow-black/10">
+    <View
+      aria-live="polite"
+      className="flex-row items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-lg shadow-black/10"
+    >
       <View className="flex-1 gap-0.5">
         <Text numberOfLines={1}>« {titre} » supprimé</Text>
         <Text variant="muted">Annulation possible pendant {remaining} s</Text>
