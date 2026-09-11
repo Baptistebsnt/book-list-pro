@@ -301,15 +301,17 @@ export default defineConfig([
     },
   },
   {
-    // Les couleurs vivent dans lib/theme.ts et global.css : l'interface les lit
-    // via useTheme() ou les classes Tailwind du thème.
+    // Les couleurs vivent dans lib/theme.ts et global.css, l'URL de l'API dans
+    // services/ : le reste de l'app lit des tokens et reçoit des URL résolues.
     files: [
       "app/**/*.{ts,tsx}",
       "components/**/*.{ts,tsx}",
+      "domain/**/*.{ts,tsx}",
       "features/**/*.{ts,tsx}",
       "hooks/**/*.{ts,tsx}",
       "providers/**/*.{ts,tsx}",
     ],
+    ignores: ["**/__test__/**"],
     rules: {
       "no-restricted-syntax": [
         "error",
@@ -318,6 +320,21 @@ export default defineConfig([
             "Literal[value=/(#[0-9a-fA-F]{3}\\b|#[0-9a-fA-F]{6}\\b|\\b(rgb|rgba|hsl|hsla)\\()/]",
           message:
             "Couleur en dur interdite : utilisez un token de lib/theme.ts (useTheme) ou une classe Tailwind du thème.",
+        },
+        {
+          selector: "Literal[value=/^[a-z][a-z\\d+.-]*:\\/\\//]",
+          message:
+            "URL en dur interdite : services/ résout les URL (resolveCoverUrl pour les couvertures).",
+        },
+        {
+          selector: "TemplateElement[value.raw=/^[a-z][a-z\\d+.-]*:\\/\\//]",
+          message:
+            "URL en dur interdite : services/ résout les URL (resolveCoverUrl pour les couvertures).",
+        },
+        {
+          selector: "MemberExpression[property.name='EXPO_PUBLIC_API_URL']",
+          message:
+            "L'URL de base de l'API se lit uniquement dans services/api/config.ts.",
         },
       ],
     },
