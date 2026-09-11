@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp, Heart } from "lucide-react-native"
+import { memo } from "react"
 import { ScrollView, View } from "react-native"
 import { Chip } from "@/components/ui/chip"
 import { Text } from "@/components/ui/text"
@@ -28,65 +29,69 @@ const ORDER_LABEL = {
   desc: "décroissant",
 } as const
 
-export const BookFilterBar = ({ controls, onChange }: BookFilterBarProps) => {
-  const sortLabel = (label: string, value: BookSort): string =>
-    value === controls.sort
-      ? `Trier par ${label.toLowerCase()}, ordre ${ORDER_LABEL[controls.order]}`
-      : `Trier par ${label.toLowerCase()}`
+export const BookFilterBar = memo(
+  ({ controls, onChange }: BookFilterBarProps) => {
+    const sortLabel = (label: string, value: BookSort): string =>
+      value === controls.sort
+        ? `Trier par ${label.toLowerCase()}, ordre ${ORDER_LABEL[controls.order]}`
+        : `Trier par ${label.toLowerCase()}`
 
-  const orderIcon = controls.order === "asc" ? ArrowUp : ArrowDown
+    const orderIcon = controls.order === "asc" ? ArrowUp : ArrowDown
 
-  const pickSort = (value: BookSort) =>
-    value === controls.sort
-      ? onChange({ order: controls.order === "asc" ? "desc" : "asc" })
-      : onChange({ sort: value })
+    const pickSort = (value: BookSort) =>
+      value === controls.sort
+        ? onChange({ order: controls.order === "asc" ? "desc" : "asc" })
+        : onChange({ sort: value })
 
-  return (
-    <View className="gap-2 pb-3">
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="gap-2 px-4"
-      >
-        {STATUS_OPTIONS.map((option) => (
+    return (
+      <View className="gap-2 pb-3">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerClassName="gap-2 px-4"
+        >
+          {STATUS_OPTIONS.map((option) => (
+            <Chip
+              key={option.label}
+              label={option.label}
+              role="radio"
+              isActive={controls.status === option.value}
+              onPress={() => onChange({ status: option.value })}
+            />
+          ))}
           <Chip
-            key={option.label}
-            label={option.label}
-            role="radio"
-            isActive={controls.status === option.value}
-            onPress={() => onChange({ status: option.value })}
+            label="Coups de cœur"
+            role="switch"
+            icon={Heart}
+            isActive={controls.favori === true}
+            onPress={() =>
+              onChange({ favori: controls.favori === true ? null : true })
+            }
           />
-        ))}
-        <Chip
-          label="Coups de cœur"
-          role="switch"
-          icon={Heart}
-          isActive={controls.favori === true}
-          onPress={() =>
-            onChange({ favori: controls.favori === true ? null : true })
-          }
-        />
-      </ScrollView>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerClassName="items-center gap-2 px-4"
-      >
-        <Text variant="muted">Trier par</Text>
-        {SORT_OPTIONS.map((option) => (
-          <Chip
-            key={option.value}
-            label={option.label}
-            role="radio"
-            icon={option.value === controls.sort ? orderIcon : null}
-            isActive={option.value === controls.sort}
-            accessibilityLabel={sortLabel(option.label, option.value)}
-            onPress={() => pickSort(option.value)}
-          />
-        ))}
-      </ScrollView>
-    </View>
-  )
-}
+        </ScrollView>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerClassName="items-center gap-2 px-4"
+        >
+          <Text variant="muted">Trier par</Text>
+          {SORT_OPTIONS.map((option) => (
+            <Chip
+              key={option.value}
+              label={option.label}
+              role="radio"
+              icon={option.value === controls.sort ? orderIcon : null}
+              isActive={option.value === controls.sort}
+              accessibilityLabel={sortLabel(option.label, option.value)}
+              onPress={() => pickSort(option.value)}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    )
+  },
+)
+
+BookFilterBar.displayName = "BookFilterBar"

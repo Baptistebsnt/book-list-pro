@@ -28,6 +28,7 @@ npm install && npm run seed && npm start   # dans api-books-v2/
 | `domain/`     | Schémas zod, types et erreurs applicatives, sans dépendance technique |
 
 Décisions d'architecture : [`docs/ADR/`](docs/ADR).
+Notes de performance : [`docs/perf/`](docs/perf).
 
 ## Tests
 

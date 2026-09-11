@@ -1,19 +1,32 @@
 import { act, renderHook, waitFor } from "@testing-library/react"
 import { HttpResponse, delay, http } from "msw"
 import { setupServer } from "msw/node"
+import { type ReactNode } from "react"
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import { normalizeFilters } from "@/domain/book"
 import { makeBook, makeBookPage } from "@/test/factories"
 import { createQueryWrapper } from "@/test/query"
 import { useBookBrowse } from "../browse"
 import { bookKeys } from "../keys"
-import { SEARCH_DEBOUNCE_MS } from "../search"
+import { BookSearchProvider, SEARCH_DEBOUNCE_MS } from "../search"
 
 const BOOKS_URL = "http://localhost:3000/books"
 
 const SERVER_DELAY_MS = 100
 
 const server = setupServer()
+
+const createBrowseWrapper = () => {
+  const { client, Wrapper } = createQueryWrapper()
+
+  const BrowseWrapper = ({ children }: { children: ReactNode }) => (
+    <Wrapper>
+      <BookSearchProvider>{children}</BookSearchProvider>
+    </Wrapper>
+  )
+
+  return { client, Wrapper: BrowseWrapper }
+}
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }))
 afterEach(() => server.resetHandlers())
@@ -38,7 +51,7 @@ describe("useBookBrowse", () => {
         return HttpResponse.json(makeBookPage())
       }),
     )
-    const { Wrapper } = createQueryWrapper()
+    const { Wrapper } = createBrowseWrapper()
 
     const { result } = renderHook(() => useBookBrowse(), { wrapper: Wrapper })
 
@@ -69,7 +82,7 @@ describe("useBookBrowse", () => {
         )
       }),
     )
-    const { client, Wrapper } = createQueryWrapper()
+    const { client, Wrapper } = createBrowseWrapper()
 
     const { result } = renderHook(() => useBookBrowse(), { wrapper: Wrapper })
 
@@ -97,7 +110,7 @@ describe("useBookBrowse", () => {
         return HttpResponse.json(makeBookPage())
       }),
     )
-    const { Wrapper } = createQueryWrapper()
+    const { Wrapper } = createBrowseWrapper()
 
     const { result } = renderHook(() => useBookBrowse(), { wrapper: Wrapper })
 
@@ -121,7 +134,7 @@ describe("useBookBrowse filters", () => {
         return HttpResponse.json(makeBookPage())
       }),
     )
-    const { Wrapper } = createQueryWrapper()
+    const { Wrapper } = createBrowseWrapper()
 
     const { result } = renderHook(() => useBookBrowse(), { wrapper: Wrapper })
 
@@ -155,7 +168,7 @@ describe("useBookBrowse filters", () => {
         )
       }),
     )
-    const { Wrapper } = createQueryWrapper()
+    const { Wrapper } = createBrowseWrapper()
 
     const { result } = renderHook(() => useBookBrowse(), { wrapper: Wrapper })
 
