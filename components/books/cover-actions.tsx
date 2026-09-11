@@ -1,4 +1,5 @@
 import { ImageUp, RotateCcw } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { Button } from "@/components/ui/button"
 import { Text } from "@/components/ui/text"
@@ -18,24 +19,20 @@ import { useReplaceCover, useRestoreCover } from "@/services/query/books"
 
 const ICON_SIZE = 16
 
-const RESTORE_LABEL = "Couverture d'origine"
-
-const UNSUPPORTED_PLATFORM =
-  "Le choix d'un fichier n'est disponible que depuis le navigateur."
-
-const uploadFailure = (error: unknown): string => {
+const failureKey = (error: unknown): string => {
   if (error instanceof UnsupportedMediaError) {
-    return "Format refusé : choisissez une image PNG, JPEG ou WebP."
+    return "books.cover.unsupportedMedia"
   }
 
   if (error instanceof PayloadTooLargeError) {
-    return "Image trop lourde même après redimensionnement : choisissez une image moins grande."
+    return "books.cover.tooLarge"
   }
 
-  return "Impossible d'envoyer cette couverture. Réessayez plus tard."
+  return "books.cover.uploadError"
 }
 
 export const CoverActions = ({ book }: { book: Book }) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const replace = useReplaceCover(book.id)
   const restore = useRestoreCover(book.id)
@@ -46,7 +43,7 @@ export const CoverActions = ({ book }: { book: Book }) => {
     const picked = await pickCoverImage()
 
     if (picked.status === "unsupported") {
-      toast.show(UNSUPPORTED_PLATFORM, { type: "info" })
+      toast.show(t("books.cover.unsupportedPlatform"), { type: "info" })
 
       return
     }
@@ -57,21 +54,19 @@ export const CoverActions = ({ book }: { book: Book }) => {
 
     replace.mutate(picked.image, {
       onSuccess: () =>
-        toast.show(`Couverture de « ${book.titre} » remplacée.`, {
+        toast.show(t("books.cover.replaced", { title: book.titre }), {
           type: "success",
         }),
-      onError: (error) => toast.show(uploadFailure(error), { type: "error" }),
+      onError: (error) => toast.show(t(failureKey(error)), { type: "error" }),
     })
   }
 
   const reset = () => {
     restore.mutate(void 0, {
       onSuccess: () =>
-        toast.show("Couverture d'origine rétablie.", { type: "success" }),
+        toast.show(t("books.cover.restored"), { type: "success" }),
       onError: () =>
-        toast.show("Impossible de rétablir la couverture d'origine.", {
-          type: "error",
-        }),
+        toast.show(t("books.cover.restoreError"), { type: "error" }),
     })
   }
 
@@ -87,7 +82,9 @@ export const CoverActions = ({ book }: { book: Book }) => {
         >
           <ImageUp size={ICON_SIZE} color={theme.foreground} />
           <Text>
-            {replace.isPending ? "Envoi en cours…" : "Remplacer la couverture"}
+            {replace.isPending
+              ? t("books.cover.sending")
+              : t("books.cover.replace")}
           </Text>
         </Button>
         {hasCoverSource(book.couverture) && (
@@ -99,13 +96,13 @@ export const CoverActions = ({ book }: { book: Book }) => {
             aria-busy={restore.isPending}
           >
             <RotateCcw size={ICON_SIZE} color={theme.foreground} />
-            <Text>{RESTORE_LABEL}</Text>
+            <Text>{t("books.cover.restore")}</Text>
           </Button>
         )}
       </View>
       {!canPick && (
         <Text variant="muted" className="text-center">
-          {UNSUPPORTED_PLATFORM}
+          {t("books.cover.unsupportedPlatform")}
         </Text>
       )}
     </View>

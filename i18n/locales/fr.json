@@ -71,6 +71,18 @@
       "internalRating": "Note interne",
       "edit": "Modifier la fiche"
     },
+    "cover": {
+      "replace": "Remplacer la couverture",
+      "sending": "Envoi en cours…",
+      "restore": "Couverture d'origine",
+      "replaced": "Couverture de « {{title}} » remplacée.",
+      "restored": "Couverture d'origine rétablie.",
+      "restoreError": "Impossible de rétablir la couverture d'origine.",
+      "unsupportedPlatform": "Le choix d'un fichier n'est disponible que depuis le navigateur.",
+      "unsupportedMedia": "Format refusé : choisissez une image PNG, JPEG ou WebP.",
+      "tooLarge": "Image trop lourde même après redimensionnement : choisissez une image moins grande.",
+      "uploadError": "Impossible d'envoyer cette couverture. Réessayez plus tard."
+    },
     "notFound": {
       "title": "Cette fiche n'existe plus",
       "description": "L'ouvrage demandé est introuvable : il a sans doute été supprimé depuis un autre poste du réseau.",
