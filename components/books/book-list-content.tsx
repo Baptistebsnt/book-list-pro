@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { FlatList, type ListRenderItem, View } from "react-native"
 import { BookListFooter } from "@/components/books/book-list-footer"
-import { BookListItem } from "@/components/books/book-list-item"
+import {
+  BOOK_ROW_HEIGHT,
+  BookListItem,
+} from "@/components/books/book-list-item"
 import { BookListSkeleton } from "@/components/books/book-list-skeleton"
 import { Button } from "@/components/ui/button"
 import { Centered } from "@/components/ui/centered"
@@ -29,11 +32,26 @@ const openBook = (book: Book) =>
 
 const openNewBook = () => router.push("/new")
 
+const INITIAL_RENDER_COUNT = 12
+const MAX_RENDER_PER_BATCH = 12
+const BATCHING_PERIOD_MS = 50
+const WINDOW_SIZE = 11
+const END_REACHED_THRESHOLD = 0.5
+
 const keyExtractor = (book: Book): string => book.id
 
 const renderItem: ListRenderItem<Book> = ({ item }) => (
   <BookListItem book={item} onPress={openBook} />
 )
+
+const getItemLayout = (
+  _: ArrayLike<Book> | null | undefined,
+  index: number,
+) => ({
+  length: BOOK_ROW_HEIGHT,
+  offset: BOOK_ROW_HEIGHT * index,
+  index,
+})
 
 export const BookListContent = ({
   books,
@@ -119,6 +137,12 @@ export const BookListContent = ({
         keyExtractor={keyExtractor}
         keyboardShouldPersistTaps="handled"
         renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        removeClippedSubviews
+        initialNumToRender={INITIAL_RENDER_COUNT}
+        maxToRenderPerBatch={MAX_RENDER_PER_BATCH}
+        updateCellsBatchingPeriod={BATCHING_PERIOD_MS}
+        windowSize={WINDOW_SIZE}
         ListFooterComponent={
           <BookListFooter
             isFetchingNextPage={isFetchingNextPage}
@@ -127,7 +151,7 @@ export const BookListContent = ({
           />
         }
         onEndReached={loadMore}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={END_REACHED_THRESHOLD}
         onRefresh={query.refetch}
         refreshing={query.isRefetching}
       />

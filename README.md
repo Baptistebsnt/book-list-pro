@@ -4,6 +4,22 @@ Application Expo de gestion du fonds d'une librairie : catalogue paginé,
 recherche, filtres et tri côté serveur, fiches détaillées, notes de lecture,
 thème clair et sombre.
 
+## Fonctionnalités
+
+- **Performance sur 500 ouvrages** — liste à hauteur de ligne fixe, `getItemLayout`
+  et fenêtrage pour un défilement fluide sans rendu superflu ([#61](https://github.com/Baptistebsnt/book-list-pro/issues/61),
+  [docs/PERFORMANCE.md](docs/PERFORMANCE.md)).
+- **Note interne 0 à 5** — notation par étoiles avec mise à jour optimiste
+  ([#55](https://github.com/Baptistebsnt/book-list-pro/issues/55)).
+- **Thème clair / sombre** — Context, préférence système et persistance
+  ([#59](https://github.com/Baptistebsnt/book-list-pro/issues/59),
+  [ADR 003](docs/ADR/003-theme-et-couleurs.md)).
+- **Interface bilingue FR / EN** — bascule à chaud et formats de date / nombre
+  localisés ([#60](https://github.com/Baptistebsnt/book-list-pro/issues/60)).
+- **Remplacement de couverture** — sélection d'image, redimensionnement, encodage
+  base64, retour à la couverture d'origine et gestion des refus `413` / `415`
+  ([#57](https://github.com/Baptistebsnt/book-list-pro/issues/57)).
+
 ## Prérequis
 
 - Node 22 ou plus (Vitest 5 s'appuie sur Rolldown, qui l'exige).
