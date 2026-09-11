@@ -1,5 +1,6 @@
 import { memo } from "react"
 import { View } from "react-native"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Text } from "@/components/ui/text"
 
 type BookListHeaderProps = {
@@ -16,7 +17,10 @@ const summary = (count: number, total: number, searchedTerm: string): string =>
 export const BookListHeader = memo(
   ({ count, total, searchedTerm = "" }: BookListHeaderProps) => (
     <View className="gap-1 px-4 pb-3 pt-2">
-      <Text variant="h3">Bibliothèque</Text>
+      <View className="flex-row items-center justify-between gap-3">
+        <Text variant="h3">Bibliothèque</Text>
+        <ThemeToggle />
+      </View>
       {count !== null && total !== null && (
         <Text variant="muted" aria-live="polite">
           {summary(count, total, searchedTerm)}

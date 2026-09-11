@@ -8,6 +8,10 @@ export default defineConfig({
     alias: {
       "@": __dirname,
       "react-native": "react-native-web",
+      "@react-native-async-storage/async-storage": path.resolve(
+        __dirname,
+        "test/stubs/async-storage.ts",
+      ),
       "expo-router": path.resolve(__dirname, "test/stubs/expo-router.ts"),
       "react-native-safe-area-context": path.resolve(
         __dirname,
