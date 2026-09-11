@@ -1,7 +1,7 @@
 import { router } from "expo-router"
 import { SearchX } from "lucide-react-native"
-import { useEffect, useRef } from "react"
-import { FlatList } from "react-native"
+import { useCallback, useEffect, useRef } from "react"
+import { FlatList, type ListRenderItem, View } from "react-native"
 import { BookListFooter } from "@/components/books/book-list-footer"
 import { BookListItem } from "@/components/books/book-list-item"
 import { BookListSkeleton } from "@/components/books/book-list-skeleton"
@@ -11,9 +11,8 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { ErrorState } from "@/components/ui/error-state"
 import { Text } from "@/components/ui/text"
 import { type Book, type NormalizedBookFilters } from "@/domain/book"
+import { cn } from "@/lib/utils"
 import { type useInfiniteBooks } from "@/services/query/books"
-
-const RELOAD_SKELETON_ROWS = 3
 
 type BookListContentProps = {
   books: Book[]
@@ -26,6 +25,12 @@ type BookListContentProps = {
 
 const openBook = (book: Book) =>
   router.push({ pathname: "/books/[id]", params: { id: book.id } })
+
+const keyExtractor = (book: Book): string => book.id
+
+const renderItem: ListRenderItem<Book> = ({ item }) => (
+  <BookListItem book={item} onPress={openBook} />
+)
 
 const emptyTitle = (searchedTerm: string): string =>
   searchedTerm.length > 0
@@ -41,10 +46,17 @@ export const BookListContent = ({
   query,
 }: BookListContentProps) => {
   const list = useRef<FlatList<Book>>(null)
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = query
 
   useEffect(() => {
     list.current?.scrollToOffset({ offset: 0, animated: false })
   }, [filters])
+
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage()
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   if (query.status === "pending") {
     return <BookListSkeleton />
@@ -60,10 +72,6 @@ export const BookListContent = ({
         />
       </Centered>
     )
-  }
-
-  if (isReloading) {
-    return <BookListSkeleton rows={RELOAD_SKELETON_ROWS} />
   }
 
   if (books.length === 0) {
@@ -89,32 +97,29 @@ export const BookListContent = ({
     )
   }
 
-  const loadMore = () => {
-    if (query.hasNextPage && !query.isFetchingNextPage) {
-      void query.fetchNextPage()
-    }
-  }
-
   return (
-    <FlatList
-      ref={list}
-      data={books}
-      keyExtractor={(book) => book.id}
-      keyboardShouldPersistTaps="handled"
-      renderItem={({ item }) => (
-        <BookListItem book={item} onPress={() => openBook(item)} />
-      )}
-      ListFooterComponent={
-        <BookListFooter
-          isFetchingNextPage={query.isFetchingNextPage}
-          hasNextPage={query.hasNextPage}
-          count={books.length}
-        />
-      }
-      onEndReached={loadMore}
-      onEndReachedThreshold={0.5}
-      onRefresh={query.refetch}
-      refreshing={query.isRefetching}
-    />
+    <View
+      className={cn("flex-1", isReloading && "opacity-50")}
+      aria-busy={isReloading}
+    >
+      <FlatList
+        ref={list}
+        data={books}
+        keyExtractor={keyExtractor}
+        keyboardShouldPersistTaps="handled"
+        renderItem={renderItem}
+        ListFooterComponent={
+          <BookListFooter
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            count={books.length}
+          />
+        }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        onRefresh={query.refetch}
+        refreshing={query.isRefetching}
+      />
+    </View>
   )
 }

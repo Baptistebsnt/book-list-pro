@@ -1,20 +1,18 @@
 import { Search, X } from "lucide-react-native"
+import { memo } from "react"
 import { Platform, Pressable, View } from "react-native"
 import { Input } from "@/components/ui/input"
 import { useTheme } from "@/hooks/use-theme"
 import { cn } from "@/lib/utils"
-
-type BookSearchBarProps = {
-  value: string
-  onChange: (value: string) => void
-}
+import { useSearchInput } from "@/services/query/books"
 
 const ICON_SIZE = 18
 
 const PLACEHOLDER = "Titre ou auteur"
 
-export const BookSearchBar = ({ value, onChange }: BookSearchBarProps) => {
+export const BookSearchBar = memo(() => {
   const theme = useTheme()
+  const { term, setTerm } = useSearchInput()
 
   return (
     <View className="flex-row items-center gap-2 px-4 pb-3">
@@ -23,8 +21,8 @@ export const BookSearchBar = ({ value, onChange }: BookSearchBarProps) => {
           <Search size={ICON_SIZE} color={theme.mutedForeground} />
         </View>
         <Input
-          value={value}
-          onChangeText={onChange}
+          value={term}
+          onChangeText={setTerm}
           placeholder={PLACEHOLDER}
           role="searchbox"
           aria-label="Rechercher un ouvrage par titre ou auteur"
@@ -35,9 +33,9 @@ export const BookSearchBar = ({ value, onChange }: BookSearchBarProps) => {
         />
       </View>
       <View className="h-11 w-11 items-center justify-center">
-        {value.length > 0 && (
+        {term.length > 0 && (
           <Pressable
-            onPress={() => onChange("")}
+            onPress={() => setTerm("")}
             role="button"
             aria-label="Effacer la recherche"
             className={cn(
@@ -51,4 +49,6 @@ export const BookSearchBar = ({ value, onChange }: BookSearchBarProps) => {
       </View>
     </View>
   )
-}
+})
+
+BookSearchBar.displayName = "BookSearchBar"

@@ -1,3 +1,4 @@
+import { memo } from "react"
 import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
@@ -8,13 +9,13 @@ import { ReadToggle } from "./read-toggle"
 
 type BookListItemProps = {
   book: Book
-  onPress: () => void
+  onPress: (book: Book) => void
 }
 
-export const BookListItem = ({ book, onPress }: BookListItemProps) => (
+export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
   <View className="flex-row items-center border-b border-border bg-background">
     <Pressable
-      onPress={onPress}
+      onPress={() => onPress(book)}
       role="button"
       className={cn(
         "flex-1 flex-row items-center gap-3 py-3 pl-4 pr-3 active:bg-muted",
@@ -36,4 +37,6 @@ export const BookListItem = ({ book, onPress }: BookListItemProps) => (
       <ReadToggle book={book} />
     </View>
   </View>
-)
+))
+
+BookListItem.displayName = "BookListItem"

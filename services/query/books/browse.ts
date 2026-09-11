@@ -8,7 +8,7 @@ import {
 } from "@/domain/book"
 import { bookKeys } from "./keys"
 import { useInfiniteBooks } from "./queries"
-import { useSearchTerm } from "./search"
+import { useSearchedTerm } from "./search"
 
 export type BookControls = {
   status: BookStatus | null
@@ -26,7 +26,7 @@ const DEFAULT_CONTROLS: BookControls = {
 
 export const useBookBrowse = () => {
   const client = useQueryClient()
-  const search = useSearchTerm()
+  const { searchedTerm, isSettled, setTerm } = useSearchedTerm()
   const [controls, setControls] = useState<BookControls>(DEFAULT_CONTROLS)
 
   const apply = useCallback(
@@ -38,26 +38,25 @@ export const useBookBrowse = () => {
   )
 
   const reset = useCallback(() => {
-    search.setTerm("")
+    setTerm("")
     apply(DEFAULT_CONTROLS)
-  }, [apply, search])
+  }, [apply, setTerm])
 
   const filters = useMemo(
-    () => normalizeFilters({ ...controls, q: search.searchedTerm }),
-    [controls, search.searchedTerm],
+    () => normalizeFilters({ ...controls, q: searchedTerm }),
+    [controls, searchedTerm],
   )
 
   const query = useInfiniteBooks(filters)
 
   return {
-    term: search.term,
-    setTerm: search.setTerm,
-    searchedTerm: search.searchedTerm,
+    setTerm,
+    searchedTerm,
     controls,
     apply,
     reset,
     filters,
-    isReloading: !search.isSettled || query.isPlaceholderData,
+    isReloading: !isSettled || query.isPlaceholderData,
     query,
   }
 }

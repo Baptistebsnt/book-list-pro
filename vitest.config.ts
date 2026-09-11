@@ -8,6 +8,11 @@ export default defineConfig({
     alias: {
       "@": __dirname,
       "react-native": "react-native-web",
+      "expo-router": path.resolve(__dirname, "test/stubs/expo-router.ts"),
+      "react-native-safe-area-context": path.resolve(
+        __dirname,
+        "test/stubs/react-native-safe-area-context.tsx",
+      ),
       "react-native-svg": path.resolve(
         __dirname,
         "test/stubs/react-native-svg.tsx",
