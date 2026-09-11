@@ -75,6 +75,13 @@ Nous retenons TanStack Query v5 comme unique gestionnaire de l'état serveur.
   distinguable du chargement initial (`status === "pending"`), et l'écran le
   montre par un squelette court de trois lignes là où le premier chargement en
   affiche six. L'application n'utilise aucun indicateur tournant.
+- **Filtres et tri dans la clé, au même titre que la recherche**
+  (`useBookBrowse`) : `status`, `favori`, `sort` et `order` sont normalisés par
+  `normalizeFilters` puis passés à `GET /books`. Changer un contrôle produit
+  une clé différente, donc une requête infinie neuve qui repart à la page 1 —
+  la pagination se réinitialise d'elle-même, sans code de remise à zéro, et
+  les pages de l'ancienne combinaison restent en cache si le libraire y
+  revient. Chaque changement annule la requête encore en vol, comme une frappe.
 - **Le `QueryClient` est créé dans `app/_layout.tsx` via `useState`**, pas au
   niveau module : l'export web statique d'Expo évaluerait sinon le même cache
   entre deux rendus.
