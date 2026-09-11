@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,30 +22,34 @@ type DeleteBookDialogProps = {
 export const DeleteBookDialog = ({
   titre,
   onConfirm,
-}: DeleteBookDialogProps) => (
-  <AlertDialog>
-    <AlertDialogTrigger asChild>
-      <Button variant="destructive">
-        <Text>Supprimer la fiche</Text>
-      </Button>
-    </AlertDialogTrigger>
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>Supprimer « {titre} » ?</AlertDialogTitle>
-        <AlertDialogDescription>
-          La fiche disparaît immédiatement de la liste. Vous disposez de{" "}
-          {UNDO_DELAY_SECONDS} secondes pour annuler avant la suppression
-          définitive côté serveur.
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>
-          <Text>Conserver</Text>
-        </AlertDialogCancel>
-        <AlertDialogAction className="bg-destructive" onPress={onConfirm}>
-          <Text>Supprimer</Text>
-        </AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
-)
+}: DeleteBookDialogProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">
+          <Text>{t("books.delete.trigger")}</Text>
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            {t("books.delete.title", { title: titre })}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            {t("books.delete.description", { seconds: UNDO_DELAY_SECONDS })}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>
+            <Text>{t("common.keep")}</Text>
+          </AlertDialogCancel>
+          <AlertDialogAction className="bg-destructive" onPress={onConfirm}>
+            <Text>{t("common.delete")}</Text>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}

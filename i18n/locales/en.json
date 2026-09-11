@@ -1,0 +1,176 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "keep": "Keep",
+    "delete": "Delete",
+    "close": "Close",
+    "reset": "Reset",
+    "retry": "Retry",
+    "retrying": "Retrying…",
+    "save": "Save",
+    "clear": "Clear",
+    "failure": "Failed",
+    "genericError": "Something went wrong."
+  },
+  "language": {
+    "code": "EN",
+    "switchToFrench": "Switch to French",
+    "switchToEnglish": "Switch to English"
+  },
+  "theme": {
+    "toLight": "Switch to light theme",
+    "toDark": "Switch to dark theme"
+  },
+  "tabs": {
+    "home": "Home",
+    "add": "Add"
+  },
+  "errors": {
+    "defaultTitle": "This data cannot be displayed",
+    "defaultDescription": "The server did not respond. Check the shop's connection, then try again."
+  },
+  "books": {
+    "coverAlt": "Cover of “{{title}}”",
+    "updateError": "Could not update “{{title}}”. Try again later.",
+    "status": {
+      "read": "Read",
+      "unread": "Unread",
+      "readByTeam": "Read by the team"
+    },
+    "library": {
+      "title": "Library",
+      "summary": "{{shown}} of {{total}} books",
+      "summarySearched": "{{shown}} of {{total}} results for “{{term}}”"
+    },
+    "field": {
+      "title": "Title",
+      "author": "Author",
+      "publisher": "Publisher",
+      "year": "Year",
+      "publishYear": "Publication year",
+      "missing": "Not provided"
+    },
+    "detail": {
+      "fallbackTitle": "Book details",
+      "loadError": "This book cannot be displayed",
+      "internalRating": "Internal rating",
+      "edit": "Edit book"
+    },
+    "notFound": {
+      "title": "This book no longer exists",
+      "description": "The requested book cannot be found: it was probably deleted from another workstation on the network.",
+      "back": "Back to the list"
+    },
+    "edit": {
+      "fallbackTitle": "Edit book",
+      "title": "Edit “{{title}}”",
+      "loadError": "This book cannot be loaded"
+    },
+    "add": {
+      "title": "Add a book",
+      "submit": "Create book",
+      "success": "“{{title}}” has joined the collection."
+    },
+    "form": {
+      "titlePlaceholder": "Book title",
+      "authorPlaceholder": "Author name",
+      "publisherPlaceholder": "Publisher name",
+      "yearPlaceholder": "Publication year",
+      "submitting": "Saving…"
+    },
+    "list": {
+      "label": "Book list",
+      "loadError": "Could not load the collection",
+      "end": "End of the collection"
+    },
+    "empty": {
+      "title": "The collection is empty",
+      "description": "No book has been catalogued yet. Add the first one to start the shop's collection.",
+      "addButton": "Add a book",
+      "searchTitle": "No results for “{{term}}”",
+      "filterTitle": "No book matches",
+      "filterDescription": "No book in the collection matches this search and these filters."
+    },
+    "search": {
+      "placeholder": "Title or author",
+      "label": "Search a book by title or author",
+      "clear": "Clear search"
+    },
+    "filter": {
+      "all": "All",
+      "read": "Read",
+      "unread": "Unread",
+      "favorites": "Favorites"
+    },
+    "sort": {
+      "label": "Sort by",
+      "title": "Title",
+      "author": "Author",
+      "year": "Year",
+      "rating": "Rating",
+      "by": "Sort by {{label}}",
+      "byWithOrder": "Sort by {{label}}, {{order}} order"
+    },
+    "order": {
+      "asc": "ascending",
+      "desc": "descending"
+    },
+    "favorite": {
+      "add": "Add “{{title}}” to favorites",
+      "remove": "Remove “{{title}}” from favorites",
+      "saveError": "Could not save the favorite for “{{title}}”"
+    },
+    "rating": {
+      "groupLabel": "Rating of “{{title}}”",
+      "set": "Rate “{{title}}” {{star}} out of {{max}}",
+      "clearLabel": "Clear the rating of “{{title}}”",
+      "unrated": "Not rated",
+      "value": "{{note}} / {{max}}",
+      "saveError": "Could not save the rating for “{{title}}”"
+    },
+    "read": {
+      "markRead": "Mark “{{title}}” as read",
+      "markUnread": "Mark “{{title}}” as unread"
+    },
+    "item": {
+      "openLabel": "Open “{{title}}”, {{author}}, {{year}}, {{status}}, {{rating}}",
+      "read": "read",
+      "unread": "unread",
+      "unrated": "not rated",
+      "rated": "rated {{note}} out of {{max}}"
+    },
+    "delete": {
+      "trigger": "Delete book",
+      "title": "Delete “{{title}}”?",
+      "description": "The book disappears from the list immediately. You have {{seconds}} seconds to undo before it is permanently deleted on the server."
+    },
+    "deletion": {
+      "undoTitle": "“{{title}}” deleted",
+      "undoCountdown": "You can undo for {{seconds}} s",
+      "failureTitle": "Deletion failed",
+      "failureDescription": "“{{title}}” is still in the collection."
+    }
+  },
+  "notes": {
+    "title": "Reading notes",
+    "listLabel": "Reading notes",
+    "addSuccess": "Note added to “{{title}}”.",
+    "deleteSuccess": "Note deleted.",
+    "deleteError": "Could not delete this note from “{{title}}”. Try again later.",
+    "loadErrorTitle": "Notes cannot be displayed",
+    "loadErrorDescription": "The reading notes for “{{title}}” could not be loaded. Check the shop's connection, then try again.",
+    "emptyTitle": "No reading notes",
+    "emptyDescription": "Nobody has written a note about “{{title}}” yet. Your first note will appear here.",
+    "form": {
+      "label": "New note",
+      "placeholder": "Add a reading note",
+      "submit": "Add note",
+      "submitting": "Adding…"
+    },
+    "delete": {
+      "button": "Delete",
+      "title": "Delete this note?",
+      "description": "This permanently removes the reading note."
+    }
+  }
+}

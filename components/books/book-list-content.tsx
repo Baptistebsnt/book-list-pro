@@ -1,6 +1,7 @@
 import { router } from "expo-router"
 import { BookPlus, SearchX } from "lucide-react-native"
 import { useCallback, useEffect, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import { FlatList, type ListRenderItem, View } from "react-native"
 import { BookListFooter } from "@/components/books/book-list-footer"
 import { BookListItem } from "@/components/books/book-list-item"
@@ -34,11 +35,6 @@ const renderItem: ListRenderItem<Book> = ({ item }) => (
   <BookListItem book={item} onPress={openBook} />
 )
 
-const emptyTitle = (searchedTerm: string): string =>
-  searchedTerm.length > 0
-    ? `Aucun résultat pour « ${searchedTerm} »`
-    : "Aucun ouvrage ne correspond"
-
 export const BookListContent = ({
   books,
   filters,
@@ -47,8 +43,14 @@ export const BookListContent = ({
   onReset,
   query,
 }: BookListContentProps) => {
+  const { t } = useTranslation()
   const list = useRef<FlatList<Book>>(null)
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = query
+
+  const emptyTitle = (searchedTerm: string): string =>
+    searchedTerm.length > 0
+      ? t("books.empty.searchTitle", { term: searchedTerm })
+      : t("books.empty.filterTitle")
 
   useEffect(() => {
     list.current?.scrollToOffset({ offset: 0, animated: false })
@@ -68,7 +70,7 @@ export const BookListContent = ({
     return (
       <Centered>
         <ErrorState
-          title="Impossible de charger le fonds"
+          title={t("books.list.loadError")}
           onRetry={() => void query.refetch()}
           isRetrying={query.isRefetching}
         />
@@ -83,20 +85,20 @@ export const BookListContent = ({
           <EmptyState
             icon={SearchX}
             title={emptyTitle(filters.q ?? "")}
-            description="Aucun ouvrage du fonds ne répond à cette recherche et à ces filtres."
+            description={t("books.empty.filterDescription")}
           >
             <Button variant="outline" onPress={onReset}>
-              <Text>Réinitialiser</Text>
+              <Text>{t("common.reset")}</Text>
             </Button>
           </EmptyState>
         ) : (
           <EmptyState
             icon={BookPlus}
-            title="Le fonds est vide"
-            description="Aucun ouvrage n'a encore été catalogué. Ajoutez le premier pour démarrer le fonds de la boutique."
+            title={t("books.empty.title")}
+            description={t("books.empty.description")}
           >
             <Button onPress={openNewBook}>
-              <Text>Ajouter un ouvrage</Text>
+              <Text>{t("books.empty.addButton")}</Text>
             </Button>
           </EmptyState>
         )}
@@ -113,7 +115,7 @@ export const BookListContent = ({
         ref={list}
         data={books}
         role="list"
-        aria-label="Liste des ouvrages"
+        aria-label={t("books.list.label")}
         keyExtractor={keyExtractor}
         keyboardShouldPersistTaps="handled"
         renderItem={renderItem}

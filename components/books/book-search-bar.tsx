@@ -1,5 +1,6 @@
 import { Search, X } from "lucide-react-native"
 import { memo } from "react"
+import { useTranslation } from "react-i18next"
 import { Platform, Pressable, View } from "react-native"
 import { Input } from "@/components/ui/input"
 import { useTheme } from "@/hooks/use-theme"
@@ -8,9 +9,8 @@ import { useSearchInput } from "@/services/query/books"
 
 const ICON_SIZE = 18
 
-const PLACEHOLDER = "Titre ou auteur"
-
 export const BookSearchBar = memo(() => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const { term, setTerm } = useSearchInput()
 
@@ -27,9 +27,9 @@ export const BookSearchBar = memo(() => {
         <Input
           value={term}
           onChangeText={setTerm}
-          placeholder={PLACEHOLDER}
+          placeholder={t("books.search.placeholder")}
           role="searchbox"
-          aria-label="Rechercher un ouvrage par titre ou auteur"
+          aria-label={t("books.search.label")}
           autoCapitalize="none"
           autoCorrect={false}
           returnKeyType="search"
@@ -41,7 +41,7 @@ export const BookSearchBar = memo(() => {
           <Pressable
             onPress={() => setTerm("")}
             role="button"
-            aria-label="Effacer la recherche"
+            aria-label={t("books.search.clear")}
             className={cn(
               "h-11 w-11 items-center justify-center rounded-full active:bg-muted",
               Platform.select({ web: "hover:bg-muted" }),

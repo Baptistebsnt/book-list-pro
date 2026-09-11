@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react-native"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
 import { type Book } from "@/domain/book"
@@ -15,15 +16,15 @@ const ICON_SIZE = 22
 
 const HIT_SLOP = 8
 
-const label = (book: Book): string =>
-  book.favori
-    ? `Retirer « ${book.titre} » des coups de cœur`
-    : `Ajouter « ${book.titre} » aux coups de cœur`
-
 export const FavoriteToggle = ({ book }: FavoriteToggleProps) => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const [hasFailed, setHasFailed] = useState(false)
   const { mutate, isPending } = useToggleFavorite()
+
+  const label = book.favori
+    ? t("books.favorite.remove", { title: book.titre })
+    : t("books.favorite.add", { title: book.titre })
 
   const toggle = () => {
     setHasFailed(false)
@@ -40,7 +41,7 @@ export const FavoriteToggle = ({ book }: FavoriteToggleProps) => {
         disabled={isPending}
         hitSlop={HIT_SLOP}
         role="switch"
-        aria-label={label(book)}
+        aria-label={label}
         aria-checked={book.favori}
         aria-busy={isPending}
         className={cn(
@@ -60,9 +61,9 @@ export const FavoriteToggle = ({ book }: FavoriteToggleProps) => {
           variant="small"
           className="text-xs text-destructive"
           aria-live="polite"
-          aria-label={`Échec de l'enregistrement du coup de cœur pour « ${book.titre} »`}
+          aria-label={t("books.favorite.saveError", { title: book.titre })}
         >
-          Échec
+          {t("common.failure")}
         </Text>
       )}
     </View>

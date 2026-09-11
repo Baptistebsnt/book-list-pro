@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { Button } from "@/components/ui/button"
 import { Field } from "@/components/ui/field"
@@ -19,6 +20,7 @@ export const ReadingNoteForm = ({
   disabled = false,
   onSubmit,
 }: ReadingNoteFormProps) => {
+  const { t } = useTranslation()
   const { control, formState, handleSubmit, reset, setError } =
     useForm<NoteDraft>({
       defaultValues: DEFAULT_VALUES,
@@ -38,7 +40,7 @@ export const ReadingNoteForm = ({
 
       setError("root", {
         message:
-          error instanceof Error ? error.message : "Une erreur est survenue.",
+          error instanceof Error ? error.message : t("common.genericError"),
       })
     }
   })
@@ -51,14 +53,17 @@ export const ReadingNoteForm = ({
         control={control}
         name="contenu"
         render={({ field, fieldState }) => (
-          <Field label="Nouvelle note" error={fieldState.error?.message}>
+          <Field
+            label={t("notes.form.label")}
+            error={fieldState.error?.message}
+          >
             <Input
               editable={!isSubmitting}
               multiline
               numberOfLines={3}
               onBlur={field.onBlur}
               onChangeText={field.onChange}
-              placeholder="Ajouter une note de lecture"
+              placeholder={t("notes.form.placeholder")}
               value={field.value}
             />
           </Field>
@@ -72,7 +77,9 @@ export const ReadingNoteForm = ({
       ) : null}
 
       <Button onPress={submit} disabled={isSubmitting}>
-        <Text>{isSubmitting ? "Ajout en cours…" : "Ajouter la note"}</Text>
+        <Text>
+          {isSubmitting ? t("notes.form.submitting") : t("notes.form.submit")}
+        </Text>
       </Button>
     </View>
   )

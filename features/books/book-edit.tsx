@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router"
+import { useTranslation } from "react-i18next"
 import { ScrollView } from "react-native"
 import { BookDetailSkeleton } from "@/components/books/book-detail-skeleton"
 import { BookForm } from "@/components/books/book-form"
@@ -14,6 +15,7 @@ type BookEditProps = {
 }
 
 export const BookEdit = ({ id }: BookEditProps) => {
+  const { t } = useTranslation()
   const router = useRouter()
   const query = useBook(id)
   const patch = usePatchBook()
@@ -36,7 +38,7 @@ export const BookEdit = ({ id }: BookEditProps) => {
           <BookNotFoundState />
         ) : (
           <ErrorState
-            title="Impossible de charger cette fiche"
+            title={t("books.edit.loadError")}
             onRetry={() => void query.refetch()}
             isRetrying={query.isFetching}
           />
@@ -64,7 +66,7 @@ export const BookEdit = ({ id }: BookEditProps) => {
     >
       <BookForm
         defaultValues={toDraft(book)}
-        submitLabel="Enregistrer"
+        submitLabel={t("common.save")}
         onSubmit={onSubmit}
         onCancel={() => router.back()}
       />

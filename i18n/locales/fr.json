@@ -1,0 +1,176 @@
+{
+  "common": {
+    "cancel": "Annuler",
+    "keep": "Conserver",
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "reset": "Réinitialiser",
+    "retry": "Réessayer",
+    "retrying": "Nouvel essai…",
+    "save": "Enregistrer",
+    "clear": "Effacer",
+    "failure": "Échec",
+    "genericError": "Une erreur est survenue."
+  },
+  "language": {
+    "code": "FR",
+    "switchToFrench": "Passer en français",
+    "switchToEnglish": "Passer en anglais"
+  },
+  "theme": {
+    "toLight": "Activer le thème clair",
+    "toDark": "Activer le thème sombre"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "add": "Ajouter"
+  },
+  "errors": {
+    "defaultTitle": "Impossible d'afficher ces données",
+    "defaultDescription": "Le serveur n'a pas répondu. Vérifiez la connexion de la boutique, puis réessayez."
+  },
+  "books": {
+    "coverAlt": "Couverture de « {{title}} »",
+    "updateError": "Impossible de mettre à jour « {{title}} ». Réessayez plus tard.",
+    "status": {
+      "read": "Lu",
+      "unread": "Non lu",
+      "readByTeam": "Lu par l'équipe"
+    },
+    "library": {
+      "title": "Bibliothèque",
+      "summary": "{{shown}} sur {{total}} ouvrages",
+      "summarySearched": "{{shown}} sur {{total}} résultats pour « {{term}} »"
+    },
+    "field": {
+      "title": "Titre",
+      "author": "Auteur",
+      "publisher": "Éditeur",
+      "year": "Année",
+      "publishYear": "Année de publication",
+      "missing": "Non renseigné"
+    },
+    "detail": {
+      "fallbackTitle": "Fiche de l'ouvrage",
+      "loadError": "Impossible d'afficher cette fiche",
+      "internalRating": "Note interne",
+      "edit": "Modifier la fiche"
+    },
+    "notFound": {
+      "title": "Cette fiche n'existe plus",
+      "description": "L'ouvrage demandé est introuvable : il a sans doute été supprimé depuis un autre poste du réseau.",
+      "back": "Retour à la liste"
+    },
+    "edit": {
+      "fallbackTitle": "Modifier l'ouvrage",
+      "title": "Modifier « {{title}} »",
+      "loadError": "Impossible de charger cette fiche"
+    },
+    "add": {
+      "title": "Ajouter un ouvrage",
+      "submit": "Créer l'ouvrage",
+      "success": "« {{title}} » a rejoint le fonds."
+    },
+    "form": {
+      "titlePlaceholder": "Titre de l'ouvrage",
+      "authorPlaceholder": "Nom de l'auteur",
+      "publisherPlaceholder": "Nom de l'éditeur",
+      "yearPlaceholder": "Année de publication",
+      "submitting": "Enregistrement…"
+    },
+    "list": {
+      "label": "Liste des ouvrages",
+      "loadError": "Impossible de charger le fonds",
+      "end": "Fin du fonds"
+    },
+    "empty": {
+      "title": "Le fonds est vide",
+      "description": "Aucun ouvrage n'a encore été catalogué. Ajoutez le premier pour démarrer le fonds de la boutique.",
+      "addButton": "Ajouter un ouvrage",
+      "searchTitle": "Aucun résultat pour « {{term}} »",
+      "filterTitle": "Aucun ouvrage ne correspond",
+      "filterDescription": "Aucun ouvrage du fonds ne répond à cette recherche et à ces filtres."
+    },
+    "search": {
+      "placeholder": "Titre ou auteur",
+      "label": "Rechercher un ouvrage par titre ou auteur",
+      "clear": "Effacer la recherche"
+    },
+    "filter": {
+      "all": "Tous",
+      "read": "Lus",
+      "unread": "Non lus",
+      "favorites": "Coups de cœur"
+    },
+    "sort": {
+      "label": "Trier par",
+      "title": "Titre",
+      "author": "Auteur",
+      "year": "Année",
+      "rating": "Note",
+      "by": "Trier par {{label}}",
+      "byWithOrder": "Trier par {{label}}, ordre {{order}}"
+    },
+    "order": {
+      "asc": "croissant",
+      "desc": "décroissant"
+    },
+    "favorite": {
+      "add": "Ajouter « {{title}} » aux coups de cœur",
+      "remove": "Retirer « {{title}} » des coups de cœur",
+      "saveError": "Échec de l'enregistrement du coup de cœur pour « {{title}} »"
+    },
+    "rating": {
+      "groupLabel": "Note de « {{title}} »",
+      "set": "Noter « {{title}} » {{star}} sur {{max}}",
+      "clearLabel": "Effacer la note de « {{title}} »",
+      "unrated": "Non notée",
+      "value": "{{note}} / {{max}}",
+      "saveError": "Échec de l'enregistrement de la note pour « {{title}} »"
+    },
+    "read": {
+      "markRead": "Marquer « {{title}} » comme lu",
+      "markUnread": "Marquer « {{title}} » comme non lu"
+    },
+    "item": {
+      "openLabel": "Ouvrir « {{title}} », {{author}}, {{year}}, {{status}}, {{rating}}",
+      "read": "lu",
+      "unread": "non lu",
+      "unrated": "non notée",
+      "rated": "noté {{note}} sur {{max}}"
+    },
+    "delete": {
+      "trigger": "Supprimer la fiche",
+      "title": "Supprimer « {{title}} » ?",
+      "description": "La fiche disparaît immédiatement de la liste. Vous disposez de {{seconds}} secondes pour annuler avant la suppression définitive côté serveur."
+    },
+    "deletion": {
+      "undoTitle": "« {{title}} » supprimé",
+      "undoCountdown": "Annulation possible pendant {{seconds}} s",
+      "failureTitle": "Échec de la suppression",
+      "failureDescription": "« {{title}} » est toujours dans le fonds."
+    }
+  },
+  "notes": {
+    "title": "Notes de lecture",
+    "listLabel": "Notes de lecture",
+    "addSuccess": "Note ajoutée à « {{title}} ».",
+    "deleteSuccess": "Note supprimée.",
+    "deleteError": "Impossible de supprimer cette note de « {{title}} ». Réessayez plus tard.",
+    "loadErrorTitle": "Impossible d'afficher les notes",
+    "loadErrorDescription": "Les notes de lecture de « {{title}} » n'ont pas pu être chargées. Vérifiez la connexion de la boutique, puis réessayez.",
+    "emptyTitle": "Aucune note de lecture",
+    "emptyDescription": "Personne n'a encore noté de remarque sur « {{title}} ». Votre première note apparaîtra ici.",
+    "form": {
+      "label": "Nouvelle note",
+      "placeholder": "Ajouter une note de lecture",
+      "submit": "Ajouter la note",
+      "submitting": "Ajout en cours…"
+    },
+    "delete": {
+      "button": "Supprimer",
+      "title": "Supprimer cette note ?",
+      "description": "Cette action retire définitivement la note de lecture."
+    }
+  }
+}

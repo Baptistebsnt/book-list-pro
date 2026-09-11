@@ -14,6 +14,10 @@ export default defineConfig({
       ),
       "expo-router": path.resolve(__dirname, "test/stubs/expo-router.ts"),
       "expo-image": path.resolve(__dirname, "test/stubs/expo-image.tsx"),
+      "expo-localization": path.resolve(
+        __dirname,
+        "test/stubs/expo-localization.ts",
+      ),
       "react-native-safe-area-context": path.resolve(
         __dirname,
         "test/stubs/react-native-safe-area-context.tsx",

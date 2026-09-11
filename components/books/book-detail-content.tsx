@@ -1,4 +1,5 @@
 import { type UseQueryResult } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 import { View } from "react-native"
 import { BookDetailActions } from "@/components/books/book-detail-actions"
 import { BookDetailCard } from "@/components/books/book-detail-card"
@@ -14,6 +15,8 @@ type BookDetailContentProps = {
 }
 
 export const BookDetailContent = ({ query }: BookDetailContentProps) => {
+  const { t } = useTranslation()
+
   if (query.isPending) {
     return <BookDetailSkeleton />
   }
@@ -25,7 +28,7 @@ export const BookDetailContent = ({ query }: BookDetailContentProps) => {
           <BookNotFoundState />
         ) : (
           <ErrorState
-            title="Impossible d'afficher cette fiche"
+            title={t("books.detail.loadError")}
             onRetry={() => void query.refetch()}
             isRetrying={query.isFetching}
           />

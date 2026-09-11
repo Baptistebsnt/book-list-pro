@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "@/components/ui/toast"
 import { type Book } from "@/domain/book"
@@ -8,6 +9,7 @@ type ReadToggleProps = {
 }
 
 export const ReadToggle = ({ book }: ReadToggleProps) => {
+  const { t } = useTranslation()
   const { mutate, isPending } = useToggleReadStatus()
 
   const toggle = (lu: boolean) => {
@@ -15,10 +17,9 @@ export const ReadToggle = ({ book }: ReadToggleProps) => {
       { id: book.id, version: book.version, lu },
       {
         onError: () => {
-          toast.show(
-            `Impossible de mettre à jour « ${book.titre} ». Réessayez plus tard.`,
-            { type: "error" },
-          )
+          toast.show(t("books.updateError", { title: book.titre }), {
+            type: "error",
+          })
         },
       },
     )
@@ -29,9 +30,11 @@ export const ReadToggle = ({ book }: ReadToggleProps) => {
       checked={book.lu}
       onCheckedChange={toggle}
       disabled={isPending}
-      accessibilityLabel={`Marquer « ${book.titre} » comme ${
-        book.lu ? "non lu" : "lu"
-      }`}
+      accessibilityLabel={
+        book.lu
+          ? t("books.read.markUnread", { title: book.titre })
+          : t("books.read.markRead", { title: book.titre })
+      }
     />
   )
 }

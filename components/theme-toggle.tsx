@@ -1,4 +1,5 @@
 import { Moon, Sun } from "lucide-react-native"
+import { useTranslation } from "react-i18next"
 import { Platform, Pressable } from "react-native"
 import { useTheme } from "@/hooks/use-theme"
 import { cn } from "@/lib/utils"
@@ -7,6 +8,7 @@ import { useAppTheme } from "@/providers/theme"
 const ICON_SIZE = 20
 
 export const ThemeToggle = () => {
+  const { t } = useTranslation()
   const theme = useTheme()
   const { scheme, toggle } = useAppTheme()
   const isDark = scheme === "dark"
@@ -17,7 +19,7 @@ export const ThemeToggle = () => {
       onPress={toggle}
       role="switch"
       aria-checked={isDark}
-      aria-label={isDark ? "Activer le thème clair" : "Activer le thème sombre"}
+      aria-label={isDark ? t("theme.toLight") : t("theme.toDark")}
       className={cn(
         "h-11 w-11 items-center justify-center rounded-full active:bg-muted",
         Platform.select({ web: "hover:bg-muted" }),
