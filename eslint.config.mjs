@@ -287,6 +287,20 @@ export default defineConfig([
     },
   },
   {
+    // Vendored from github.com/rit3zh/expo-animated-toast — imperative,
+    // reanimated-driven code that diverges from our structural base rules.
+    files: ["components/ui/toast/**"],
+    rules: {
+      "react-compiler/react-compiler": "off",
+      "max-lines": "off",
+      "max-lines-per-function": "off",
+      "max-nested-callbacks": "off",
+      complexity: "off",
+      "consistent-return": "off",
+      "no-console": "off",
+    },
+  },
+  {
     files: ["services/api/errors.ts"],
     rules: {
       "max-classes-per-file": "off",

@@ -1,5 +1,5 @@
-import { Alert } from "react-native"
 import { Switch } from "@/components/ui/switch"
+import { toast } from "@/components/ui/toast"
 import { type Book } from "@/domain/book"
 import { useToggleReadStatus } from "@/services/query/books"
 
@@ -15,9 +15,9 @@ export const ReadToggle = ({ book }: ReadToggleProps) => {
       { id: book.id, version: book.version, lu },
       {
         onError: () => {
-          Alert.alert(
-            "Statut non enregistré",
+          toast.show(
             `Impossible de mettre à jour « ${book.titre} ». Réessayez plus tard.`,
+            { type: "error" },
           )
         },
       },

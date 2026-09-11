@@ -2,7 +2,6 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { HttpResponse, http } from "msw"
 import { setupServer } from "msw/node"
 import { createElement } from "react"
-import { Alert } from "react-native"
 import {
   afterAll,
   afterEach,
@@ -12,9 +11,14 @@ import {
   it,
   vi,
 } from "vitest"
+import { toast } from "@/components/ui/toast"
 import { makeBook } from "@/test/factories"
 import { createQueryWrapper } from "@/test/query"
 import { ReadToggle } from "../read-toggle"
+
+vi.mock("@/components/ui/toast", () => ({
+  toast: { show: vi.fn() },
+}))
 
 vi.mock("@/components/ui/switch", () => ({
   Switch: (props: {
@@ -37,7 +41,7 @@ const server = setupServer()
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }))
 afterEach(() => {
   server.resetHandlers()
-  vi.restoreAllMocks()
+  vi.clearAllMocks()
 })
 afterAll(() => server.close())
 
@@ -69,8 +73,8 @@ describe("ReadToggle", () => {
     await waitFor(() => expect(patched).toBe(true))
   })
 
-  it("signals the user when the write fails", async () => {
-    const alert = vi.spyOn(Alert, "alert").mockImplementation(() => null)
+  it("signals the user with a toast when the write fails", async () => {
+    const show = vi.mocked(toast.show)
     server.use(
       http.patch(PATCH_URL, () => new HttpResponse(null, { status: 500 })),
     )
@@ -78,7 +82,8 @@ describe("ReadToggle", () => {
 
     fireEvent.click(screen.getByRole("button"))
 
-    await waitFor(() => expect(alert).toHaveBeenCalledOnce())
-    expect(alert.mock.calls[0]?.[1]).toContain("Dune")
+    await waitFor(() => expect(show).toHaveBeenCalledOnce())
+    expect(show.mock.calls[0]?.[0]).toContain("Dune")
+    expect(show.mock.calls[0]?.[1]).toEqual({ type: "error" })
   })
 })
