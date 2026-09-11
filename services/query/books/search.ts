@@ -5,11 +5,6 @@ import { bookKeys } from "./keys"
 
 export const SEARCH_DEBOUNCE_MS = 300
 
-/**
- * Holds the typed term and settles it after 300 ms. Each keystroke aborts the
- * list request still in flight, so a stale answer can never land after a
- * fresher one; the abandoned request writes nothing to the cache.
- */
 export const useSearchTerm = () => {
   const client = useQueryClient()
   const [term, setTerm] = useState("")
