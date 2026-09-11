@@ -22,3 +22,9 @@ export const bookFiltersSchema = z.object({
 export type BookFilters = z.input<typeof bookFiltersSchema>
 
 export type NormalizedBookFilters = z.output<typeof bookFiltersSchema>
+
+export type BookStatus = NonNullable<NormalizedBookFilters["status"]>
+
+export type BookSort = NormalizedBookFilters["sort"]
+
+export type BookOrder = NormalizedBookFilters["order"]
