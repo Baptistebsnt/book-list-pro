@@ -1,9 +1,10 @@
 import { memo } from "react"
 import { Platform, Pressable, View } from "react-native"
 import { Text } from "@/components/ui/text"
-import { type Book } from "@/domain/book"
+import { type Book, MAX_RATING } from "@/domain/book"
 import { cn } from "@/lib/utils"
 import { FavoriteToggle } from "./favorite-toggle"
+import { NoteStars } from "./note-stars"
 import { ReadBadge } from "./read-badge"
 import { ReadToggle } from "./read-toggle"
 
@@ -15,7 +16,7 @@ type BookListItemProps = {
 const openLabel = (book: Book): string =>
   `Ouvrir « ${book.titre} », ${book.auteur}, ${book.annee}, ${
     book.lu ? "lu" : "non lu"
-  }`
+  }, ${book.note === null ? "non notée" : `noté ${book.note} sur ${MAX_RATING}`}`
 
 export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
   <View
@@ -38,6 +39,7 @@ export const BookListItem = memo(({ book, onPress }: BookListItemProps) => (
         <Text variant="muted" numberOfLines={1}>
           {book.auteur} · {book.annee}
         </Text>
+        {book.note !== null && <NoteStars note={book.note} size={14} />}
       </View>
       <ReadBadge lu={book.lu} />
     </Pressable>
