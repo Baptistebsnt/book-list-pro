@@ -24,12 +24,6 @@ const DEFAULT_CONTROLS: BookControls = {
   order: "asc",
 }
 
-/**
- * Single source of truth for everything the list asks the server: the
- * debounced search term, the two filters and the sort. They all land in the
- * query key, so changing one starts a fresh infinite query at page 1 instead
- * of filtering the pages already loaded.
- */
 export const useBookBrowse = () => {
   const client = useQueryClient()
   const search = useSearchTerm()
