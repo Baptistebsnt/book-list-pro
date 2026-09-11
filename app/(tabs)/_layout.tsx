@@ -1,16 +1,20 @@
 import { Tabs } from "expo-router"
 import { Home, Plus } from "lucide-react-native"
 import { HapticTab } from "@/components/haptic-tab"
-import { Colors } from "@/constants/theme"
-import { useColorScheme } from "@/hooks/use-color-scheme"
+import { useTheme } from "@/hooks/use-theme"
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme()
+const TabLayout = () => {
+  const theme = useTheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: theme.foreground,
+        tabBarInactiveTintColor: theme.mutedForeground,
+        tabBarStyle: {
+          backgroundColor: theme.background,
+          borderTopColor: theme.border,
+        },
         headerShown: false,
         tabBarButton: HapticTab,
       }}
@@ -32,3 +36,5 @@ export default function TabLayout() {
     </Tabs>
   )
 }
+
+export default TabLayout

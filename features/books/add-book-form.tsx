@@ -2,6 +2,7 @@ import { useRouter } from "expo-router"
 import { View } from "react-native"
 import { BookForm } from "@/components/books/book-form"
 import { Text } from "@/components/ui/text"
+import { toast } from "@/components/ui/toast"
 import { type BookDraft, EMPTY_DRAFT } from "@/domain/book"
 import { useCreateBook } from "@/services/query/books"
 
@@ -10,7 +11,9 @@ export const AddBookForm = () => {
   const createBook = useCreateBook()
 
   const onSubmit = async (values: BookDraft) => {
-    await createBook.mutateAsync(values)
+    const book = await createBook.mutateAsync(values)
+
+    toast.show(`« ${book.titre} » a rejoint le fonds.`, { type: "success" })
     router.replace("/")
   }
 
@@ -20,7 +23,7 @@ export const AddBookForm = () => {
         <Text variant="h3">Ajouter un ouvrage</Text>
         <BookForm
           defaultValues={EMPTY_DRAFT}
-          submitLabel="Creer l'ouvrage"
+          submitLabel="Créer l'ouvrage"
           onSubmit={onSubmit}
           onCancel={() => router.replace("/")}
         />

@@ -11,9 +11,14 @@ export const BookDetail = ({ id }: BookDetailProps) => {
   const query = useBook(id)
 
   return (
-    <ScrollView contentContainerClassName="gap-6 p-4" className="bg-background">
+    <ScrollView
+      contentContainerClassName="grow gap-6 p-4"
+      className="bg-background"
+    >
       <BookDetailContent query={query} />
-      {query.isSuccess ? <ReadingNotes bookId={query.data.id} /> : null}
+      {query.isSuccess ? (
+        <ReadingNotes bookId={query.data.id} bookTitle={query.data.titre} />
+      ) : null}
     </ScrollView>
   )
 }

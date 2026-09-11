@@ -19,7 +19,7 @@ export const UndoDeletionBar = ({
   return (
     <View
       aria-live="polite"
-      className="flex-row items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-lg shadow-black/10"
+      className="flex-row items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-lg shadow-overlay/10"
     >
       <View className="flex-1 gap-0.5">
         <Text numberOfLines={1}>« {titre} » supprimé</Text>

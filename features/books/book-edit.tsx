@@ -3,6 +3,7 @@ import { ScrollView } from "react-native"
 import { BookDetailSkeleton } from "@/components/books/book-detail-skeleton"
 import { BookForm } from "@/components/books/book-form"
 import { BookNotFoundState } from "@/components/books/book-not-found-state"
+import { Centered } from "@/components/ui/centered"
 import { ErrorState } from "@/components/ui/error-state"
 import { type BookDraft, diffDraft, toDraft } from "@/domain/book"
 import { NotFoundError } from "@/services/api/errors"
@@ -18,20 +19,29 @@ export const BookEdit = ({ id }: BookEditProps) => {
   const patch = usePatchBook()
 
   if (query.isPending) {
-    return <BookDetailSkeleton />
+    return (
+      <ScrollView
+        contentContainerClassName="grow gap-6 p-4"
+        className="bg-background"
+      >
+        <BookDetailSkeleton />
+      </ScrollView>
+    )
   }
 
   if (query.isError) {
-    if (query.error instanceof NotFoundError) {
-      return <BookNotFoundState />
-    }
-
     return (
-      <ErrorState
-        title="Impossible de charger cette fiche"
-        onRetry={() => void query.refetch()}
-        isRetrying={query.isFetching}
-      />
+      <Centered>
+        {query.error instanceof NotFoundError ? (
+          <BookNotFoundState />
+        ) : (
+          <ErrorState
+            title="Impossible de charger cette fiche"
+            onRetry={() => void query.refetch()}
+            isRetrying={query.isFetching}
+          />
+        )}
+      </Centered>
     )
   }
 
@@ -48,7 +58,10 @@ export const BookEdit = ({ id }: BookEditProps) => {
   }
 
   return (
-    <ScrollView contentContainerClassName="gap-6 p-4" className="bg-background">
+    <ScrollView
+      contentContainerClassName="grow gap-6 p-4"
+      className="bg-background"
+    >
       <BookForm
         defaultValues={toDraft(book)}
         submitLabel="Enregistrer"
