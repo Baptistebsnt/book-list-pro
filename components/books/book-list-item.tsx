@@ -16,6 +16,8 @@ type BookListItemProps = {
   onPress: (book: Book) => void
 }
 
+export const BOOK_ROW_HEIGHT = 88
+
 export const BookListItem = memo(({ book, onPress }: BookListItemProps) => {
   const { t } = useTranslation()
 
@@ -33,6 +35,7 @@ export const BookListItem = memo(({ book, onPress }: BookListItemProps) => {
   return (
     <View
       role="listitem"
+      style={{ height: BOOK_ROW_HEIGHT }}
       className="flex-row items-center border-b border-border bg-background"
     >
       <Pressable
